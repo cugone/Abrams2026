@@ -234,7 +234,7 @@ void Editor::ShowMinMaxCloseButtons() noexcept {
     if(ImGui::ImageButton(GetAssetTextureFromPath(max_or_restore_down_button_path), Vector2{nc_button_sizes, nc_button_sizes}, Vector2::Zero, Vector2::One, 0, Rgba::NoAlpha, Rgba::NoAlpha)) {
         auto* renderer = ServiceLocator::get<IRendererService>();
         auto* app = ServiceLocator::get<IAppService>();
-        !renderer->GetOutput()->GetWindow()->IsFullscreen() ? app->Maximize() : app->Restore();
+        !renderer->GetOutput()->GetWindow()->IsFullscreen() ? app->Maximize() : app->Restore(0,0);
     }
     ImGui::SameLine(minimize_button_offset);
     if(ImGui::ImageButton(GetAssetTextureFromPath(FileUtils::GetKnownFolderPath(FileUtils::KnownPathID::GameData) / "Resources/Icons/MinimizeButtonAsset.png"), Vector2{nc_button_sizes, nc_button_sizes}, Vector2::Zero, Vector2::One, 0, Rgba::NoAlpha, Rgba::NoAlpha)) {

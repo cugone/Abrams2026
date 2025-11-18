@@ -1,0 +1,11 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="DebugProfile" />
+    <BuildType Name="FinalBuild" />
+    <BuildType Name="Release" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Project Path="Editor/Code/Editor.vcxproj" Id="b585e210-208b-4a38-8470-4c3ab0d31440" />
+  <Project Path="Engine/Code/Engine/Engine.vcxproj" Id="acbda225-83de-4fba-a746-0135429fb391" />
+</Solution>
