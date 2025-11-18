@@ -18,7 +18,7 @@
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow);
 
 int WINAPI wWinMain(HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, PWSTR /*pCmdLine*/, int /*nCmdShow*/) {
-    Engine<Editor>::Initialize(std::string{"Abrams Game Engine 2022"});
+    Engine<Editor>::Initialize(std::string{"Abrams Game Engine 2026"});
     Engine<Editor>::Run();
     Engine<Editor>::Shutdown();
 }

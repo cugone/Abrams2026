@@ -23,26 +23,25 @@
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{b585e210-208b-4a38-8470-4c3ab0d31440}</ProjectGuid>
     <RootNamespace>Editor</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='FinalBuild|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
     <VcpkgConfiguration>Release</VcpkgConfiguration>
@@ -50,7 +49,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugProfile|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
     <VcpkgConfiguration>Release</VcpkgConfiguration>
@@ -62,27 +61,27 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\Engine\Code\Engine\Abrams2022.Default.props" />
-    <Import Project="..\..\Engine\Code\Engine\Abrams2022.Debug.Default.props" />
-    <Import Project="..\..\Engine\Code\Engine\Game.Abrams2022.Default.props" />
+    <Import Project="..\..\Engine\Code\Engine\Abrams2026.Default.props" />
+    <Import Project="..\..\Engine\Code\Engine\Abrams2026.Debug.Default.props" />
+    <Import Project="..\..\Engine\Code\Engine\Game.Abrams2026.Default.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\Engine\Code\Engine\Abrams2022.Default.props" />
-    <Import Project="..\..\Engine\Code\Engine\Abrams2022.Release.Default.props" />
-    <Import Project="..\..\Engine\Code\Engine\Game.Abrams2022.Default.props" />
+    <Import Project="..\..\Engine\Code\Engine\Abrams2026.Default.props" />
+    <Import Project="..\..\Engine\Code\Engine\Abrams2026.Release.Default.props" />
+    <Import Project="..\..\Engine\Code\Engine\Game.Abrams2026.Default.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='FinalBuild|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\Engine\Code\Engine\Abrams2022.Default.props" />
-    <Import Project="..\..\Engine\Code\Engine\Abrams2022.FinalBuild.Default.props" />
-    <Import Project="..\..\Engine\Code\Engine\Game.Abrams2022.Default.props" />
+    <Import Project="..\..\Engine\Code\Engine\Abrams2026.Default.props" />
+    <Import Project="..\..\Engine\Code\Engine\Abrams2026.FinalBuild.Default.props" />
+    <Import Project="..\..\Engine\Code\Engine\Game.Abrams2026.Default.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugProfile|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\Engine\Code\Engine\Abrams2022.Default.props" />
-    <Import Project="..\..\Engine\Code\Engine\Abrams2022.DebugProfile.Default.props" />
-    <Import Project="..\..\Engine\Code\Engine\Game.Abrams2022.Default.props" />
+    <Import Project="..\..\Engine\Code\Engine\Abrams2026.Default.props" />
+    <Import Project="..\..\Engine\Code\Engine\Abrams2026.DebugProfile.Default.props" />
+    <Import Project="..\..\Engine\Code\Engine\Game.Abrams2026.Default.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
