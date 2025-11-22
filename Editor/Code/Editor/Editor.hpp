@@ -19,6 +19,7 @@ class Editor : public GameBase {
 public:
     enum class AssetType {
         None
+        , Font
         , Folder
         , Texture
         , Log
@@ -45,6 +46,7 @@ public:
     static constexpr const std::string GetAssetTypeName(const AssetType& type) noexcept {
         switch(type) {
         case AssetType::None: return "None";
+        case AssetType::Font: return "Font";
         case AssetType::Folder: return "Folder";
         case AssetType::Texture: return "Texture";
         case AssetType::Log: return "Log";

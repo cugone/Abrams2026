@@ -67,17 +67,16 @@ void ContentBrowserPanel::Update([[maybe_unused]] TimeUtils::FPSeconds deltaSeco
                 stats.filesize = std::filesystem::file_size(p);
                 //stats.asset_type = editor->GetAssetType(p);
                 stats.asset_type = Editor::GetAssetTypeName(editor->GetAssetType(p));
-                ImGui::PushID(str_id.c_str());
                 if(std::filesystem::is_directory(p)) {
-                    if(ImGui::ImageButton(icon, Vector2{thumbnailSize, thumbnailSize}, Vector2::Zero, Vector2::One, 0, Rgba::NoAlpha, Rgba::White)) {
+                    if(ImGui::ImageButton(str_id, icon, Vector2{thumbnailSize, thumbnailSize}, Vector2::Zero, Vector2::One, Rgba::NoAlpha, Rgba::White)) {
                         currentDirectory /= p.filename();
                         m_CacheNeedsImmediateUpdate = true;
                     }
                 } else {
-                    if(ImGui::ImageButton(icon, Vector2{thumbnailSize, thumbnailSize}, Vector2::Zero, Vector2::One, 0, Rgba::NoAlpha, Rgba::White)) {
+                    if(ImGui::ImageButton(str_id, icon, Vector2{thumbnailSize, thumbnailSize}, Vector2::Zero, Vector2::One, Rgba::NoAlpha, Rgba::White)) {
+                        /* DO NOTHING */
                     }
                 }
-                ImGui::PopID();
                 const auto filename_string = p.filename().string();
                 const auto filename_size = ImGui::CalcTextSize(filename_string.c_str(), nullptr);
                 ImGui::TextWrapped(filename_string.c_str());
@@ -137,7 +136,7 @@ void ContentBrowserPanel::ShowContextMenuOnEmptySpace() noexcept {
                 ImGui::CloseCurrentPopup();
                 static const auto opf_str = [&]() {
                     static const auto extension_list = StringUtils::Split(".ttf,.fnt");
-                    static const auto description_list = StringUtils::Split("TIFF Font, BMFont");
+                    static const auto description_list = StringUtils::Split("TrueType Font, BMFont");
                     GUARANTEE_OR_DIE(extension_list.size() == description_list.size(), "Font import extension list and description list size mis-match!")
                     static const auto size = extension_list.size();
                     std::string result;

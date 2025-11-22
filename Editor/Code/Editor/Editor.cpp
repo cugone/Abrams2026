@@ -30,10 +30,13 @@
 #include "Engine/Input/InputSystem.hpp"
 #include "Engine/UI/UISystem.hpp"
 
+#include "Engine/UI/DearImgui.hpp"
+
 #include <algorithm>
 #include <chrono>
 #include <limits>
 #include <numeric>
+#include <string>
 #include <sstream>
 #include <thread>
 
@@ -79,10 +82,18 @@ void Editor::Update(TimeUtils::FPSeconds deltaSeconds) noexcept {
 void Editor::Render() const noexcept {
 
     auto* renderer = ServiceLocator::get<IRendererService>();
-    renderer->BeginRender(buffer->GetTexture(), Rgba::Black, buffer->GetDepthStencil());
+    renderer->BeginRender(buffer->GetTexture(), Rgba::Magenta, buffer->GetDepthStencil());
 
     renderer->SetOrthoProjectionFromViewWidth(static_cast<float>(m_ViewportWidth), m_editorCamera.GetAspectRatio(), 0.01f, 1.0f);
     renderer->SetCamera(m_editorCamera.GetCamera());
+
+    {
+        const auto S = Matrix4::I;
+        const auto R = Matrix4::I;
+        const auto T = Matrix4::CreateTranslationMatrix(Vector2(IntVector2(m_ViewportWidth, m_ViewportHeight)) / 0.50f);
+        const auto M = Matrix4::MakeSRT(S, R, T);
+        renderer->DrawTextLine(M, renderer->GetDefaultFont(), "Hello World");
+    }
 
     renderer->BeginRenderToBackbuffer();
 
@@ -133,8 +144,7 @@ void Editor::ShowUI(TimeUtils::FPSeconds deltaSeconds) noexcept {
 }
 
 void Editor::ShowMainMenu([[maybe_unused]] TimeUtils::FPSeconds deltaSeconds) noexcept {
-    ImGui::BeginMainMenuBar();
-    {
+    if(ImGui::BeginMainMenuBar()) {
         if(ImGui::BeginMenu("File")) {
             if(ImGui::MenuItem("New", "Ctrl+N")) {
                 DoFileNew();
@@ -201,7 +211,7 @@ void Editor::ShowMainMenu([[maybe_unused]] TimeUtils::FPSeconds deltaSeconds) no
             ImGui::EndMenu();
         }
         //TODO: Implement custom minimize, maximize, and close buttons
-        //ShowMinMaxCloseButtons();
+        ShowMinMaxCloseButtons();
         ImGui::EndMainMenuBar();
     }
 }
@@ -216,10 +226,12 @@ void Editor::ShowMinMaxCloseButtons() noexcept {
     ImGui::PushStyleColor(ImGuiCol_Button, Rgba::NoAlpha.GetAsRawValue());
     ImGui::PushStyleColor(ImGuiCol_ButtonActive, Rgba::NoAlpha.GetAsRawValue());
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, Rgba::Red.GetAsRawValue());
-
-    if(ImGui::ImageButton(GetAssetTextureFromPath(FileUtils::GetKnownFolderPath(FileUtils::KnownPathID::GameData) / "Resources/Icons/CloseButtonAsset.png"), Vector2{nc_button_sizes, nc_button_sizes}, Vector2::Zero, Vector2::One, 0, Rgba::NoAlpha, Rgba::NoAlpha)) {
-        auto* app = ServiceLocator::get<IAppService>();
-        app->SetIsQuitting(true);
+    {
+        const std::string close_button_id{"##CloseButton"};
+        if(ImGui::ImageButton(close_button_id, GetAssetTextureFromPath(FileUtils::GetKnownFolderPath(FileUtils::KnownPathID::GameData) / "Resources/Icons/CloseButtonAsset.png"), Vector2{nc_button_sizes, nc_button_sizes}, Vector2::Zero, Vector2::One, Rgba::NoAlpha, Rgba::NoAlpha)) {
+            auto* app = ServiceLocator::get<IAppService>();
+            app->SetIsQuitting(true);
+        }
     }
     ImGui::PopStyleColor();
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, Rgba::LightGray.GetAsRawValue());
@@ -231,15 +243,21 @@ void Editor::ShowMinMaxCloseButtons() noexcept {
         }
         return FileUtils::GetKnownFolderPath(FileUtils::KnownPathID::GameData) / "Resources/Icons/RestoreDownButtonAsset.png";
     }(); //IIIL
-    if(ImGui::ImageButton(GetAssetTextureFromPath(max_or_restore_down_button_path), Vector2{nc_button_sizes, nc_button_sizes}, Vector2::Zero, Vector2::One, 0, Rgba::NoAlpha, Rgba::NoAlpha)) {
-        auto* renderer = ServiceLocator::get<IRendererService>();
-        auto* app = ServiceLocator::get<IAppService>();
-        !renderer->GetOutput()->GetWindow()->IsFullscreen() ? app->Maximize() : app->Restore(0,0);
+    {
+        const std::string maxrestore_button_id{"##maximizeRestoreWindowButton"};
+        if(ImGui::ImageButton(maxrestore_button_id, GetAssetTextureFromPath(max_or_restore_down_button_path), Vector2{nc_button_sizes, nc_button_sizes}, Vector2::Zero, Vector2::One, Rgba::NoAlpha, Rgba::NoAlpha)) {
+            auto* renderer = ServiceLocator::get<IRendererService>();
+            auto* app = ServiceLocator::get<IAppService>();
+            !renderer->GetOutput()->GetWindow()->IsFullscreen() ? app->Maximize() : app->Restore(0, 0);
+        }
     }
     ImGui::SameLine(minimize_button_offset);
-    if(ImGui::ImageButton(GetAssetTextureFromPath(FileUtils::GetKnownFolderPath(FileUtils::KnownPathID::GameData) / "Resources/Icons/MinimizeButtonAsset.png"), Vector2{nc_button_sizes, nc_button_sizes}, Vector2::Zero, Vector2::One, 0, Rgba::NoAlpha, Rgba::NoAlpha)) {
-        auto* app = ServiceLocator::get<IAppService>();
-        app->SetIsQuitting(true);
+    {
+        const std::string min_button_id{"##minimizeWindowButton"};
+        if(ImGui::ImageButton(min_button_id, GetAssetTextureFromPath(FileUtils::GetKnownFolderPath(FileUtils::KnownPathID::GameData) / "Resources/Icons/MinimizeButtonAsset.png"), Vector2{nc_button_sizes, nc_button_sizes}, Vector2::Zero, Vector2::One, Rgba::NoAlpha, Rgba::NoAlpha)) {
+            auto* app = ServiceLocator::get<IAppService>();
+            app->SetIsQuitting(true);
+        }
     }
     ImGui::PopStyleColor();
     ImGui::PopStyleColor();
@@ -287,7 +305,7 @@ void Editor::ShowMainViewport([[maybe_unused]] TimeUtils::FPSeconds deltaSeconds
         m_ViewportHeight = static_cast<uint32_t>(std::floor(viewportSize.y));
         buffer->Resize(m_ViewportWidth, m_ViewportHeight);
     }
-    ImGui::Image(buffer->GetTexture(), viewportSize, Vector2::Zero, Vector2::One, Rgba::White, Rgba::NoAlpha);
+    ImGui::Image(buffer->GetTexture(), viewportSize, Vector2::Zero, Vector2::One);
     m_IsViewportWindowActive = ImGui::IsWindowFocused() || ImGui::IsWindowHovered();
     ImGui::End();
 }
@@ -324,6 +342,7 @@ Texture* Editor::GetAssetTextureFromPath(const std::filesystem::path& path) cons
     auto* defaultTexture = renderer->GetTexture("__white");
     if(HasAssetExtension(path)) {
         const auto e = path.extension();
+        const auto eAsLowercase = StringUtils::ToLowerCase(e.string());
         std::filesystem::path p{};
         const auto BuildPath = [&](const char* pathSuffix) -> std::filesystem::path {
             auto p = FileUtils::GetKnownFolderPath(FileUtils::KnownPathID::GameData) / std::filesystem::path{pathSuffix};
@@ -333,11 +352,15 @@ Texture* Editor::GetAssetTextureFromPath(const std::filesystem::path& path) cons
         };
         if(std::filesystem::is_directory(path)) {
             p = BuildPath("Resources/Icons/FolderAsset.png");
-        } else if(e == ".txt") {
+        } else if(eAsLowercase == ".ttf") {
+            p = BuildPath("Resources/Icons/TtfAsset.png");
+        } else if(eAsLowercase == ".fnt") {
+            p = BuildPath("Resources/Icons/BmfontAsset.png");
+        } else if(eAsLowercase == ".txt") {
             p = BuildPath("Resources/Icons/TextAsset.png");
-        } else if(e == ".ascene") {
+        } else if(eAsLowercase == ".ascene") {
             p = BuildPath("Resources/Icons/SceneAsset.png");
-        } else if(e == ".log") {
+        } else if(eAsLowercase == ".log") {
             p = BuildPath("Resources/Icons/LogAsset.png");
         } else if(IsImageAssetExtension(e)) {
             return renderer->CreateOrGetTexture(path, IntVector3::XY_Axis);
@@ -349,14 +372,18 @@ Texture* Editor::GetAssetTextureFromPath(const std::filesystem::path& path) cons
 
 Editor::AssetType Editor::GetAssetType(const std::filesystem::path& path) const noexcept {
     const auto e = path.extension();
+    const auto eAsLowercase = StringUtils::ToLowerCase(e.string());
     if(IsAssetExtension(e)) {
-        if(e == ".txt") {
+        if(eAsLowercase == ".txt") {
             return Editor::AssetType::Text;
         }
-        if(e == ".log") {
+        if(eAsLowercase == ".log") {
             return Editor::AssetType::Log;
         }
-        if(e == ".ascene") {
+        if(eAsLowercase == ".ttf" || eAsLowercase == ".fnt") {
+            return Editor::AssetType::Font;
+        }
+        if(eAsLowercase == ".ascene") {
             return Editor::AssetType::Scene;
         }
         if(IsImageAssetExtension(e)) {
@@ -370,11 +397,16 @@ Editor::AssetType Editor::GetAssetType(const std::filesystem::path& path) const 
 }
 
 bool Editor::IsAssetExtension(const std::filesystem::path& ext) const noexcept {
-    if(ext == ".txt") {
+    const auto extAsLowercase = StringUtils::ToLowerCase(ext.string());
+    if(extAsLowercase == ".txt") {
         return true;
-    } else if(ext == ".ascene") {
+    } else if(extAsLowercase == ".ascene") {
         return true;
-    } else if(ext == ".log") {
+    } else if(extAsLowercase == ".log") {
+        return true;
+    } else if(extAsLowercase == ".ttf") {
+        return true;
+    } else if(extAsLowercase == ".fnt") {
         return true;
     } else {
         return IsImageAssetExtension(ext);
