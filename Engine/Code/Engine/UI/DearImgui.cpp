@@ -99,12 +99,13 @@ void DearImgui::BeginFrame() noexcept {
 #ifdef PROFILE_BUILD
     ZoneScopedC(0xFF0000);
 #endif
-    ImGui_ImplDX11_NewFrame();
-    ImGui_ImplWin32_NewFrame();
-    ImGui::NewFrame();
     if(m_ini_saveTimer.CheckAndReset()) {
         ImGui::SaveIniSettingsToDisk(m_ini_filepath.string().c_str());
     }
+
+    ImGui_ImplDX11_NewFrame();
+    ImGui_ImplWin32_NewFrame();
+    ImGui::NewFrame();
 }
 
 void DearImgui::Update() noexcept {
