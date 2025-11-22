@@ -58,6 +58,7 @@ void DearImgui::Initialize() noexcept {
     auto* renderer = ServiceLocator::get<IRendererService>();
     const auto dims = Vector2{renderer->GetOutput()->GetDimensions()};
     auto& io = ImGui::GetIO();
+
     io.DisplaySize.x = dims.x;
     io.DisplaySize.y = dims.y;
 
@@ -112,9 +113,6 @@ void DearImgui::Update() noexcept {
 #ifdef PROFILE_BUILD
     ZoneScopedC(0xFF0000);
 #endif
-    const auto* const app = ServiceLocator::get<IAppService>();
-    auto& io = ImGui::GetIO();
-    io.AddFocusEvent(app->HasFocus());
 
 #if !defined(IMGUI_DISABLE_DEMO_WINDOWS)
     if(m_show_imgui_demo_window) {
