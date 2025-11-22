@@ -13,11 +13,11 @@
 #include "Engine/Services/IAppService.hpp"
 #include "Engine/Services/IRendererService.hpp"
 
+#include <string_view>
+
 #ifdef PROFILE_BUILD
 #include <Thirdparty/Tracy/tracy/Tracy.hpp>
 #endif
-
-#include <Thirdparty/Imgui/imgui_internal.h>
 
 #ifndef UI_DEBUG
     #define IMGUI_DISABLE_DEMO_WINDOWS
@@ -70,7 +70,64 @@ void DearImgui::Initialize() noexcept {
     if(std::filesystem::exists(m_ini_filepath)) {
         ImGui::LoadIniSettingsFromDisk(m_ini_filepath.string().c_str());
     } else {
-        ImGui::SaveIniSettingsToDisk(m_ini_filepath.string().c_str());
+        constexpr const std::string_view default_ini{
+R"(
+[Window][DockSpaceViewport_11111111]
+Pos=0,19
+Size=1600,881
+Collapsed=0
+
+[Window][Debug##Default]
+Pos=60,60
+Size=400,400
+Collapsed=0
+
+[Window][World Inspector]
+Pos=1334,19
+Size=266,662
+Collapsed=0
+DockId=0x00000004,1
+
+[Window][Settings]
+Pos=0,19
+Size=368,662
+Collapsed=0
+DockId=0x00000005,0
+
+[Window][Properties]
+Pos=1334,19
+Size=266,662
+Collapsed=0
+DockId=0x00000004,0
+
+[Window][Content Browser]
+Pos=0,683
+Size=1600,217
+Collapsed=0
+DockId=0x00000002,0
+
+[Window][Viewport]
+Pos=370,19
+Size=962,662
+Collapsed=0
+DockId=0x00000006,0
+
+[Window][WindowOverViewport_11111111]
+Pos=0,19
+Size=1600,881
+Collapsed=0
+
+[Docking][Data]
+DockSpace       ID=0x08BD597D Window=0x1BBC0F80 Pos=16,81 Size=1600,881 Split=Y Selected=0xC450F867
+  DockNode      ID=0x00000001 Parent=0x08BD597D SizeRef=1600,662 Split=X Selected=0xC450F867
+    DockNode    ID=0x00000003 Parent=0x00000001 SizeRef=1332,662 Split=X Selected=0xC450F867
+      DockNode  ID=0x00000005 Parent=0x00000003 SizeRef=368,662 Selected=0x4746B4B8
+      DockNode  ID=0x00000006 Parent=0x00000003 SizeRef=962,662 CentralNode=1 Selected=0xC450F867
+    DockNode    ID=0x00000004 Parent=0x00000001 SizeRef=266,662 Selected=0x8C72BEA8
+  DockNode      ID=0x00000002 Parent=0x08BD597D SizeRef=1600,217 Selected=0x3DF3100E
+)"
+};
+        ImGui::LoadIniSettingsFromMemory(default_ini.data(), default_ini.size());
     }
 
     m_ini_saveTimer.SetSeconds(TimeUtils::FPSeconds{io.IniSavingRate});
