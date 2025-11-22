@@ -56,10 +56,14 @@ class Vector2;
 class Vector4;
 //Custom ImGui overloads
 namespace ImGui {
-void Image(const Texture* texture, const Vector2& size, const Vector2& uv0, const Vector2& uv1, const Rgba& tint_col, const Rgba& border_col) noexcept;
-void Image(Texture* texture, const Vector2& size, const Vector2& uv0, const Vector2& uv1, const Rgba& tint_col, const Rgba& border_col) noexcept;
-[[nodiscard]] bool ImageButton(const Texture* texture, const Vector2& size, const Vector2& uv0, const Vector2& uv1, int frame_padding, const Rgba& bg_col, const Rgba& tint_col) noexcept;
-[[nodiscard]] bool ImageButton(Texture* texture, const Vector2& size, const Vector2& uv0, const Vector2& uv1, int frame_padding, const Rgba& bg_col, const Rgba& tint_col) noexcept;
+void Image(const Texture* texture, const Vector2& size, const Vector2& uv0, const Vector2& uv1) noexcept;
+void Image(Texture* texture, const Vector2& size, const Vector2& uv0, const Vector2& uv1) noexcept;
+[[deprecated("Use ImageWithBg or remove tint and border")]] void Image(const Texture* texture, const Vector2& size, const Vector2& uv0, const Vector2& uv1, const Rgba& tint_col, const Rgba& border_col) noexcept;
+[[deprecated("Use ImageWithBg or remove tint and border")]] void Image(Texture* texture, const Vector2& size, const Vector2& uv0, const Vector2& uv1, const Rgba& tint_col, const Rgba& border_col) noexcept;
+void ImageWithBg(const Texture* texture, const Vector2& size, const Vector2& uv0, const Vector2& uv1, const Rgba& tint_col, const Rgba& border_col) noexcept;
+void ImageWithBg(Texture* texture, const Vector2& size, const Vector2& uv0, const Vector2& uv1, const Rgba& tint_col, const Rgba& border_col) noexcept;
+[[nodiscard]] bool ImageButton(const std::string& id, const Texture* texture, const Vector2& size, const Vector2& uv0, const Vector2& uv1, const Rgba& bg_col, const Rgba& tint_col) noexcept;
+[[nodiscard]] bool ImageButton(const std::string& id, Texture* texture, const Vector2& size, const Vector2& uv0, const Vector2& uv1, const Rgba& bg_col, const Rgba& tint_col) noexcept;
 
 [[nodiscard]] bool ColorEdit3(const char* label, Rgba& color, ImGuiColorEditFlags flags = 0) noexcept;
 [[nodiscard]] bool ColorEdit4(const char* label, Rgba& color, ImGuiColorEditFlags flags = 0) noexcept;

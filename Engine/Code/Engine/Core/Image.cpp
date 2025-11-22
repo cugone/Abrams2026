@@ -351,7 +351,7 @@ Image Image::CreateImageFromFileBuffer(const std::vector<unsigned char>& data) n
 
 bool Image::IsSupportedExtension(const std::filesystem::path& ext) noexcept {
     static const auto list = StringUtils::Split(Image::GetSupportedExtensionsList());
-    return std::find(std::cbegin(list), std::cend(list), ext.string()) != std::cend(list);
+    return std::find(std::cbegin(list), std::cend(list), StringUtils::ToLowerCase(ext.string())) != std::cend(list);
 }
 
 void swap(Image& a, Image& b) noexcept {
