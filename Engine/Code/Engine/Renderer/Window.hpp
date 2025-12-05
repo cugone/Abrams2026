@@ -7,7 +7,7 @@
 #include <string>
 
 struct WindowDesc {
-    std::string title{"Created with Abrams 2022 (c) Casey Ugone"};
+    std::string title{"Created with Abrams 2026 (c) Casey Ugone"};
     IntVector2 position{};
     IntVector2 dimensions{1600, 900};
     RHIOutputMode mode{RHIOutputMode::Windowed};
