@@ -13,7 +13,7 @@
       <Message>Copying $(TargetFileName) to Run_$(PlatformName)...</Message>
     </PostBuildEvent>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)Code;$(SolutionDir)..\..\Abrams2022\Engine\Code;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Code;$(SolutionDir)..\..\Abrams2026\Engine\Code;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
 </Project>
