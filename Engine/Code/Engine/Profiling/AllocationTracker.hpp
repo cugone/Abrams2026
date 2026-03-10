@@ -15,7 +15,7 @@ public:
     struct status_t {
         std::size_t leaked_objs = 0u;
         std::size_t leaked_bytes = 0u;
-        operator bool() const noexcept {
+        explicit operator bool() const noexcept {
             return leaked_objs || leaked_bytes;
         }
         friend std::ostream& operator<<(std::ostream& os, [[maybe_unused]] const status_t& s) noexcept {
@@ -29,7 +29,7 @@ public:
         std::size_t frame_id = 0u;
         std::size_t leaked_objs = 0u;
         std::size_t leaked_bytes = 0u;
-        operator bool() const noexcept {
+        explicit operator bool() const noexcept {
             return leaked_objs || leaked_bytes;
         }
         friend std::ostream& operator<<(std::ostream& os, [[maybe_unused]] const status_frame_t& s) noexcept {
