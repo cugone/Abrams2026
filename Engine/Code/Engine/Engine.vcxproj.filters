@@ -161,6 +161,9 @@
     <Filter Include="Thirdparty\freetype\freetype\internal\services">
       <UniqueIdentifier>{ea88b0f7-fe87-4797-8c9d-b2adb072af46}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Thirdparty\zlib">
+      <UniqueIdentifier>{130896fa-f8ea-4b73-9251-f5cee8820867}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Math\Vector2.cpp">
@@ -687,6 +690,18 @@
     </ClCompile>
     <ClCompile Include="Core\Font.cpp">
       <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Thirdparty\zlib\unzip.c">
+      <Filter>Thirdparty\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Thirdparty\zlib\zip.c">
+      <Filter>Thirdparty\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Thirdparty\zlib\ioapi.c">
+      <Filter>Thirdparty\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Thirdparty\zlib\iowin32.c">
+      <Filter>Thirdparty\zlib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2031,6 +2046,33 @@
     <ClInclude Include="Core\IFont.hpp">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="..\Thirdparty\zlib\unzip.h">
+      <Filter>Thirdparty\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\zlib\zip.h">
+      <Filter>Thirdparty\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\zlib\zlib.h">
+      <Filter>Thirdparty\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\zlib\zconf.h">
+      <Filter>Thirdparty\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\zlib\ioapi.h">
+      <Filter>Thirdparty\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\zlib\ints.h">
+      <Filter>Thirdparty\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\zlib\crypt.h">
+      <Filter>Thirdparty\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\zlib\skipset.h">
+      <Filter>Thirdparty\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\zlib\iowin32.h">
+      <Filter>Thirdparty\zlib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Renderer\DirectX\Shaders\webp.hlsl">
@@ -2064,6 +2106,9 @@
     </None>
     <None Include="Renderer\DirectX\Shaders\roundedrectangle_VS.cso">
       <Filter>Renderer\DirectX\Shaders</Filter>
+    </None>
+    <None Include="..\Thirdparty\zlib\zconf.h.in">
+      <Filter>Thirdparty\zlib</Filter>
     </None>
   </ItemGroup>
 </Project>

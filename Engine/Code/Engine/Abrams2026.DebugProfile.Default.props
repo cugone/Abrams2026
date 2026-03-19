@@ -14,8 +14,8 @@
       <PreprocessorDefinitions>TRACY_ENABLE;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Lib>
-      <AdditionalLibraryDirectories>$(ProjectDir)../Thirdparty/webp/lib;$(ProjectDir)../Thirdparty/webm/lib/release;$(ProjectDir)../Thirdparty/box2d/lib;$(ProjectDir)../Thirdparty/freetype/lib/release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freetype.lib;libwebp.lib;libwebpdemux.lib;libwebpmux.lib;libwebm_release.lib;box2d_rd.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)../Thirdparty/webp/lib;$(ProjectDir)../Thirdparty/webm/lib/release;$(ProjectDir)../Thirdparty/box2d/lib;$(ProjectDir)../Thirdparty/freetype/lib/release;$(ProjectDir)../Thirdparty/zlib/lib/Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freetype.lib;libwebp.lib;libwebpdemux.lib;libwebpmux.lib;libwebm_release.lib;box2d_rd.lib;z.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup />

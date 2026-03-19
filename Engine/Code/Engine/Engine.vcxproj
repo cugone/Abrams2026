@@ -31,6 +31,10 @@
     <ClCompile Include="..\Thirdparty\stb\stb.cpp" />
     <ClCompile Include="..\Thirdparty\TinyXML2\tinyxml2.cpp" />
     <ClCompile Include="..\Thirdparty\Tracy\TracyClient.cpp" />
+    <ClCompile Include="..\Thirdparty\zlib\ioapi.c" />
+    <ClCompile Include="..\Thirdparty\zlib\iowin32.c" />
+    <ClCompile Include="..\Thirdparty\zlib\unzip.c" />
+    <ClCompile Include="..\Thirdparty\zlib\zip.c" />
     <ClCompile Include="Audio\Audio3DCone.cpp" />
     <ClCompile Include="Audio\Audio3DEmitter.cpp" />
     <ClCompile Include="Audio\Audio3DListener.cpp" />
@@ -458,6 +462,15 @@
     <ClInclude Include="..\Thirdparty\webp\mux.h" />
     <ClInclude Include="..\Thirdparty\webp\mux_types.h" />
     <ClInclude Include="..\Thirdparty\webp\types.h" />
+    <ClInclude Include="..\Thirdparty\zlib\crypt.h" />
+    <ClInclude Include="..\Thirdparty\zlib\ints.h" />
+    <ClInclude Include="..\Thirdparty\zlib\ioapi.h" />
+    <ClInclude Include="..\Thirdparty\zlib\iowin32.h" />
+    <ClInclude Include="..\Thirdparty\zlib\skipset.h" />
+    <ClInclude Include="..\Thirdparty\zlib\unzip.h" />
+    <ClInclude Include="..\Thirdparty\zlib\zconf.h" />
+    <ClInclude Include="..\Thirdparty\zlib\zip.h" />
+    <ClInclude Include="..\Thirdparty\zlib\zlib.h" />
     <ClInclude Include="Audio\Audio3DCone.hpp" />
     <ClInclude Include="Audio\Audio3DEmitter.hpp" />
     <ClInclude Include="Audio\Audio3DListener.hpp" />
@@ -671,6 +684,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Thirdparty\zlib\zconf.h.in" />
     <None Include="Renderer\DirectX\Shaders\Font_PS.cso">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugProfile|x64'">true</ExcludedFromBuild>

@@ -9,7 +9,8 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <PostBuildEvent>
-      <Command>xcopy /Y /F /I "$(TargetPath)" "$(SolutionDir)Run_$(PlatformName)\"</Command>
+      <Command>xcopy /Y /F /I "$(TargetPath)" "$(SolutionDir)Run_$(PlatformName)\"
+xcopy /Y /F /I "$(AbramsEngineThirdpartyDir)zlib/lib/$(Configuration)/*.dll" "$(SolutionDir)Run_$(PlatformName)\"</Command>
       <Message>Copying $(TargetFileName) to Run_$(PlatformName)...</Message>
     </PostBuildEvent>
     <ClCompile>
