@@ -352,6 +352,7 @@
     <ClInclude Include="..\Thirdparty\ImGui\imstb_textedit.h" />
     <ClInclude Include="..\Thirdparty\ImGui\imstb_truetype.h" />
     <ClInclude Include="..\Thirdparty\nlohmann\json\json.hpp" />
+    <ClInclude Include="..\Thirdparty\nlohmann\json\json_fwd.hpp" />
     <ClInclude Include="..\Thirdparty\stb\stb_image.h" />
     <ClInclude Include="..\Thirdparty\stb\stb_image_write.h" />
     <ClInclude Include="..\Thirdparty\stb\stb_rect_pack.h" />

@@ -2073,6 +2073,9 @@
     <ClInclude Include="..\Thirdparty\zlib\iowin32.h">
       <Filter>Thirdparty\zlib</Filter>
     </ClInclude>
+    <ClInclude Include="..\Thirdparty\nlohmann\json\json_fwd.hpp">
+      <Filter>Thirdparty\JSON</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Renderer\DirectX\Shaders\webp.hlsl">
