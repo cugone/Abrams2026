@@ -7,6 +7,10 @@
     <LocalDebuggerWorkingDirectory>$(SolutionDir)Run_$(Platform)</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
+    <PropertyGroup Label="Build Event Triggers">
+      <RunPostBuildEvent>Always</RunPostBuildEvent>
+      <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+    </PropertyGroup>
   <ItemDefinitionGroup>
     <PostBuildEvent>
       <Command>xcopy /Y /F /I "$(TargetPath)" "$(SolutionDir)Run_$(PlatformName)\"
