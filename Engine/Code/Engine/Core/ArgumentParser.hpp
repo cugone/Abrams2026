@@ -40,7 +40,7 @@ public:
     [[nodiscard]] bool good() const noexcept;
     [[nodiscard]] bool bad() const noexcept;
     [[nodiscard]] bool eof() const noexcept;
-    [[nodiscard]] operator bool() const noexcept;
+    [[nodiscard]] explicit operator bool() const noexcept;
     [[nodiscard]] bool operator!() const noexcept;
 
     bool GetNext(Rgba& value) const noexcept;

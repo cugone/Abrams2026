@@ -9,8 +9,8 @@
     </ClCompile>
     <Lib />
     <Lib>
-      <AdditionalLibraryDirectories>$(ProjectDir)../Thirdparty/webp/lib;$(ProjectDir)../Thirdparty/webm/lib/debug;$(ProjectDir)../Thirdparty/box2d/lib;$(ProjectDir)../Thirdparty/freetype/lib/debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freetype_debug.lib;libwebp_debug.lib;libwebpdemux_debug.lib;libwebpmux_debug.lib;libwebm_debug.lib;box2d_d.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)../Thirdparty/webp/lib;$(ProjectDir)../Thirdparty/webm/lib/debug;$(ProjectDir)../Thirdparty/box2d/lib;$(ProjectDir)../Thirdparty/freetype/lib/debug;$(ProjectDir)../Thirdparty/zlib/lib/Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freetype_debug.lib;libwebp_debug.lib;libwebpdemux_debug.lib;libwebpmux_debug.lib;libwebm_debug.lib;box2d_d.lib;zd.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup />

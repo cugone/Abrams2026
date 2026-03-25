@@ -31,6 +31,10 @@
     <ClCompile Include="..\Thirdparty\stb\stb.cpp" />
     <ClCompile Include="..\Thirdparty\TinyXML2\tinyxml2.cpp" />
     <ClCompile Include="..\Thirdparty\Tracy\TracyClient.cpp" />
+    <ClCompile Include="..\Thirdparty\zlib\ioapi.c" />
+    <ClCompile Include="..\Thirdparty\zlib\iowin32.c" />
+    <ClCompile Include="..\Thirdparty\zlib\unzip.c" />
+    <ClCompile Include="..\Thirdparty\zlib\zip.c" />
     <ClCompile Include="Audio\Audio3DCone.cpp" />
     <ClCompile Include="Audio\Audio3DEmitter.cpp" />
     <ClCompile Include="Audio\Audio3DListener.cpp" />
@@ -348,6 +352,7 @@
     <ClInclude Include="..\Thirdparty\ImGui\imstb_textedit.h" />
     <ClInclude Include="..\Thirdparty\ImGui\imstb_truetype.h" />
     <ClInclude Include="..\Thirdparty\nlohmann\json\json.hpp" />
+    <ClInclude Include="..\Thirdparty\nlohmann\json\json_fwd.hpp" />
     <ClInclude Include="..\Thirdparty\stb\stb_image.h" />
     <ClInclude Include="..\Thirdparty\stb\stb_image_write.h" />
     <ClInclude Include="..\Thirdparty\stb\stb_rect_pack.h" />
@@ -458,6 +463,15 @@
     <ClInclude Include="..\Thirdparty\webp\mux.h" />
     <ClInclude Include="..\Thirdparty\webp\mux_types.h" />
     <ClInclude Include="..\Thirdparty\webp\types.h" />
+    <ClInclude Include="..\Thirdparty\zlib\crypt.h" />
+    <ClInclude Include="..\Thirdparty\zlib\ints.h" />
+    <ClInclude Include="..\Thirdparty\zlib\ioapi.h" />
+    <ClInclude Include="..\Thirdparty\zlib\iowin32.h" />
+    <ClInclude Include="..\Thirdparty\zlib\skipset.h" />
+    <ClInclude Include="..\Thirdparty\zlib\unzip.h" />
+    <ClInclude Include="..\Thirdparty\zlib\zconf.h" />
+    <ClInclude Include="..\Thirdparty\zlib\zip.h" />
+    <ClInclude Include="..\Thirdparty\zlib\zlib.h" />
     <ClInclude Include="Audio\Audio3DCone.hpp" />
     <ClInclude Include="Audio\Audio3DEmitter.hpp" />
     <ClInclude Include="Audio\Audio3DListener.hpp" />
@@ -671,6 +685,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Thirdparty\zlib\zconf.h.in" />
     <None Include="Renderer\DirectX\Shaders\Font_PS.cso">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugProfile|x64'">true</ExcludedFromBuild>
@@ -789,7 +804,6 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <EnablePREfast>false</EnablePREfast>
       <AdditionalOptions>/we4242 /we4254 /we4263 /we4265 /we4287 /we4289 /we4296 /we4311 /we4545 /we4546 /we4547 /we4549 /we4555 /we4619 /we4640 /we4826 /we4905 /we4906 /we4928 %(AdditionalOptions)</AdditionalOptions>
@@ -800,7 +814,6 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <StructMemberAlignment>Default</StructMemberAlignment>
       <EnablePREfast>false</EnablePREfast>
@@ -815,7 +828,6 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='FinalBuild|x64'">
     <ClCompile>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <StructMemberAlignment>Default</StructMemberAlignment>
       <PreprocessorDefinitions>FINAL_BUILD;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -831,7 +843,6 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugProfile|x64'">
     <ClCompile>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <StructMemberAlignment>Default</StructMemberAlignment>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>

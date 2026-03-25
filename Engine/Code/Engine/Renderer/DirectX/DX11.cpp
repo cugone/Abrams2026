@@ -601,7 +601,10 @@ bool ValidateViewFormatForVideo(const ImageFormat& image_format, const ImageForm
         }
     }
     case ImageFormat::Nv12: {
-        return false;
+        switch(view_format) {
+        case ImageFormat::R8G8B8A8_UNorm: return true;
+        default: return false;
+        }
     }
     case ImageFormat::P010: {
         return false;
