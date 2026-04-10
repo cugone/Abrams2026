@@ -6,9 +6,17 @@
 #include "Engine/Math/MathUtils.hpp"
 #include "Engine/Profiling/ProfileLogScope.hpp"
 
+#include "Engine/Services/ServiceLocator.hpp"
+#include "Engine/Services/IFileLoggerService.hpp"
+
+#include <array>
 #include <algorithm>
+#include <cstdint>
 #include <sstream>
+#include <span>
+#include <string>
 #include <vector>
+#include <stdexcept>
 
 namespace DataUtils {
 
@@ -261,5 +269,197 @@ std::string GetAttributeAsString(const XMLElement& element, const std::string& a
     const auto* attrAsCStr = element.Attribute(attributeName.c_str());
     return std::string{attrAsCStr ? attrAsCStr : ""};
 }
+
+
+
+namespace Base64 {
+
+//Encoding table, filename- and URL-safe
+static constexpr const char encoding_table_filenames[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+
+//Encoding table
+static constexpr const char encoding_table_default[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+std::string encode(const std::string& input) noexcept {
+    return encode(std::span(input));
+}
+
+std::string encode(std::span<const char> input) noexcept {
+    const auto as_bytes = std::as_bytes(input);
+    return encode(std::span<const uint8_t>{reinterpret_cast<const uint8_t*>(as_bytes.data()), as_bytes.size()});
+}
+
+std::string encode(const std::filesystem::path& input) noexcept {
+    const auto filename_as_string = input.string();
+    const auto span = std::span(filename_as_string);
+    const auto as_bytes = std::as_bytes(span);
+    return encode(std::span<const uint8_t>{reinterpret_cast<const uint8_t*>(as_bytes.data()), as_bytes.size()}, DataUtils::Base64::Base64CodecOptions{.use_filename_safe_table = true});
+}
+
+std::string encode(std::span<const std::uint8_t> input, const Base64CodecOptions& options /*= Base64CodecOptions{}*/) noexcept {
+    const std::size_t len = input.size();
+    if(len == 0) {
+        return {};
+    }
+
+    //4 output chars for every 3 bytes
+    std::string output;
+    output.resize(((len + 2) / 3) * 4);
+
+    std::size_t i = 0;
+    std::size_t o = 0;
+
+    const auto& encoding_table = options.use_filename_safe_table ? encoding_table_filenames : encoding_table_default;
+
+    //Process full 3-byte chunks
+    for(; i + 2 < len; i += 3) {
+        const std::uint32_t triple =
+        (input[i] << 16) | (input[i + 1] << 8) | (input[i + 2]);
+
+        output[o++] = encoding_table[(triple >> 18) & 0x3F];
+        output[o++] = encoding_table[(triple >> 12) & 0x3F];
+        output[o++] = encoding_table[(triple >> 6) & 0x3F];
+        output[o++] = encoding_table[triple & 0x3F];
+    }
+
+    //Handle padding
+    if(const std::size_t remaining = len - i; remaining) {
+        std::uint32_t triple = input[i] << 16;
+
+        if(remaining == 2) {
+            triple |= input[i + 1] << 8;
+        }
+
+        output[o++] = encoding_table[(triple >> 18) & 0x3F];
+        output[o++] = encoding_table[(triple >> 12) & 0x3F];
+
+        if(remaining == 2) {
+            output[o++] = encoding_table[(triple >> 6) & 0x3F];
+            output[o++] = '=';
+        } else { //remaining == 1
+            output[o++] = '=';
+            output[o++] = '=';
+        }
+    }
+
+    return output;
+}
+
+
+namespace detail {
+
+// Reverse lookup table (ASCII → 6-bit value)
+static constexpr std::array<std::uint8_t, 256> make_table_default() {
+    std::array<std::uint8_t, 256> table{};
+
+    // Initialize all to 0xFF (invalid)
+    for(auto& v : table) {
+        v = 0xFF;
+    }
+
+    constexpr char chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+    for(std::uint8_t i = 0; i < 64; ++i) {
+        table[static_cast<std::uint8_t>(chars[i])] = i;
+    }
+
+    return table;
+}
+
+// Reverse lookup table (ASCII → 6-bit value)
+static constexpr std::array<std::uint8_t, 256> make_table_filenames() {
+    std::array<std::uint8_t, 256> table{};
+
+    // Initialize all to 0xFF (invalid)
+    for(auto& v : table) {
+        v = 0xFF;
+    }
+
+    constexpr char chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+
+    for(std::uint8_t i = 0; i < 64; ++i) {
+        table[static_cast<std::uint8_t>(chars[i])] = i;
+    }
+
+    return table;
+}
+
+static constexpr auto reverse_table_default = make_table_default();
+static constexpr auto reverse_table_filenames = make_table_filenames();
+
+} // namespace detail
+
+[[nodiscard]] std::string decode(std::span<const char> input, const Base64CodecOptions& options /*= Base64CodecOptions{}*/) noexcept {
+    const std::size_t input_length = input.size();
+    if(input_length == 0) {
+        return {};
+    }
+
+    if(input_length % 4 != 0) {
+        auto* logger = ServiceLocator::get<IFileLoggerService>();
+        logger->LogWarnLine("Invalid Base64 length");
+        return {};
+    }
+
+    // Count padding
+    std::size_t padding = 0;
+    if(input_length >= 2) {
+        if(input[input_length - 1] == '=') {
+            ++padding;
+        }
+        if(input[input_length - 2] == '=') {
+            ++padding;
+        }
+    }
+
+    const std::size_t output_len = (input_length / 4) * 3 - padding;
+
+    std::string output;
+    output.resize(output_len);
+
+    std::size_t i = 0;
+    std::size_t o = 0;
+
+    const auto& reverse_table = options.use_filename_safe_table ? detail::reverse_table_filenames : detail::reverse_table_default;
+
+    for(; i < input_length; i += 4) {
+        const std::uint8_t c0 = reverse_table[static_cast<std::uint8_t>(input[i])];
+        const std::uint8_t c1 = reverse_table[static_cast<std::uint8_t>(input[i + 1])];
+
+        if(c0 == 0xFF || c1 == 0xFF) {
+            auto* logger = ServiceLocator::get<IFileLoggerService>();
+            logger->LogWarnLine("Invalid Base64 character");
+            return {};
+        }
+
+        const std::uint8_t c2 = (input[i + 2] == '=') ? 0 : reverse_table[static_cast<std::uint8_t>(input[i + 2])];
+
+        const std::uint8_t c3 = (input[i + 3] == '=') ? 0 : reverse_table[static_cast<std::uint8_t>(input[i + 3])];
+
+        if((input[i + 2] != '=' && c2 == 0xFF) || (input[i + 3] != '=' && c3 == 0xFF)) {
+            auto* logger = ServiceLocator::get<IFileLoggerService>();
+            logger->LogWarnLine("Invalid Base64 character");
+            return {};
+        }
+
+        const std::uint32_t triple = (c0 << 18) | (c1 << 12) | (c2 << 6) | (c3);
+
+        if(o < output_len) {
+            output[o++] = static_cast<char>((triple >> 16) & 0xFF);
+        }
+
+        if(o < output_len) {
+            output[o++] = static_cast<char>((triple >> 8) & 0xFF);
+        }
+
+        if(o < output_len) {
+            output[o++] = static_cast<char>(triple & 0xFF);
+        }
+    }
+
+    return output;
+}
+
+} // namespace Base64
 
 } // namespace DataUtils
