@@ -67,13 +67,13 @@ struct ArchiveBinaryFileDesc {
     std::vector<uint8_t> buffer;
 };
 
-[[nodiscard]] bool WriteBufferToFile(void* buffer, std::size_t size, std::filesystem::path filepath) noexcept;
+[[nodiscard]] bool WriteBufferToFile(void* buffer, std::streamsize size, std::filesystem::path filepath) noexcept;
 [[nodiscard]] bool WriteBufferToFile(const std::string& buffer, std::filesystem::path filepath) noexcept;
 [[nodiscard]] std::optional<std::vector<uint8_t>> ReadBinaryBufferFromFile(std::filesystem::path filepath) noexcept;
 [[nodiscard]] std::optional<std::string> ReadStringBufferFromFile(std::filesystem::path filepath) noexcept;
-[[nodiscard]] std::optional<std::string> ReadSomeBinaryBufferFromFile(std::filesystem::path filepath, std::size_t pos, std::size_t count = 0u) noexcept;
+[[nodiscard]] std::optional<std::string> ReadSomeBinaryBufferFromFile(std::filesystem::path filepath, std::streampos pos, std::streamsize count = 0u) noexcept;
 [[nodiscard]] std::optional<std::string> ReadSomeBinaryBufferFromFile(std::ifstream& ifs, std::streampos pos, std::streamsize count = 0u) noexcept;
-[[nodiscard]] std::optional<std::string> ReadSomeStringBufferFromFile(std::filesystem::path filepath, std::size_t pos, std::size_t count = 0u) noexcept;
+[[nodiscard]] std::optional<std::string> ReadSomeStringBufferFromFile(std::filesystem::path filepath, std::streampos pos, std::streamsize count = 0u) noexcept;
 [[nodiscard]] std::optional<std::string> ReadSomeStringBufferFromFile(std::ifstream& ifs, std::streampos pos, std::streamsize count = 0u) noexcept;
 [[nodiscard]] bool CreateFolders(const std::filesystem::path& filepath) noexcept;
 [[nodiscard]] bool IsSystemPathId(const KnownPathID& pathid) noexcept;

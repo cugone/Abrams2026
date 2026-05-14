@@ -30,7 +30,7 @@ int ArchiveCompressionLevelToZLibCompressionLevel(FileUtils::ArchiveCompressionL
 
 GUID GetKnownPathIdForOS(const KnownPathID& pathid) noexcept;
 
-bool WriteBufferToFile(void* buffer, std::size_t size, std::filesystem::path filepath) noexcept {
+bool WriteBufferToFile(void* buffer, std::streamsize size, std::filesystem::path filepath) noexcept {
     namespace FS = std::filesystem;
     filepath = FS::absolute(filepath);
     filepath.make_preferred();
@@ -86,7 +86,7 @@ std::optional<std::vector<uint8_t>> ReadBinaryBufferFromFile(std::filesystem::pa
     const auto byte_size = FS::file_size(filepath);
     std::vector<uint8_t> out_buffer{};
     out_buffer.resize(byte_size);
-    if(std::ifstream ifs{filepath, std::ios_base::binary}; ifs.read(reinterpret_cast<char*>(out_buffer.data()), out_buffer.size())) {
+    if(std::ifstream ifs{filepath, std::ios_base::binary}; ifs.read(reinterpret_cast<char*>(out_buffer.data()), static_cast<std::streamsize>(out_buffer.size()))) {
         return out_buffer;
     }
     return {};
@@ -122,7 +122,7 @@ std::optional<std::string> ReadStringBufferFromFile(std::filesystem::path filepa
 
 //This version of ReadSome is intended for one-time-only reads of a portion of a TEXT file.
 //If you want multiple reads use the ifstream version.
-[[nodiscard]] std::optional<std::string> ReadSomeStringBufferFromFile(std::filesystem::path filepath, std::size_t pos, std::size_t count /*= 0u*/) noexcept {
+[[nodiscard]] std::optional<std::string> ReadSomeStringBufferFromFile(std::filesystem::path filepath, std::streampos pos, std::streamsize count /*= 0u*/) noexcept {
     namespace FS = std::filesystem;
     const auto initial_path_not_exist = !FS::exists(filepath);
     if(initial_path_not_exist) {
@@ -169,7 +169,7 @@ std::optional<std::string> ReadStringBufferFromFile(std::filesystem::path filepa
 //This version of ReadSome is intended for one-time-only reads of a portion of a BINARY file.
 //If you want multiple reads use the ifstream version.
 //If you do, make sure it is set to binary mode.
-[[nodiscard]] std::optional<std::string> ReadSomeBinaryBufferFromFile(std::filesystem::path filepath, std::size_t pos, std::size_t count /*= 0u*/) noexcept {
+[[nodiscard]] std::optional<std::string> ReadSomeBinaryBufferFromFile(std::filesystem::path filepath, std::streampos pos, std::streamsize count /*= 0u*/) noexcept {
     namespace FS = std::filesystem;
     const auto initial_path_not_exist = !FS::exists(filepath);
     if(initial_path_not_exist) {
