@@ -7,7 +7,6 @@
 
 #include <filesystem>
 #include <memory>
-#include <vector>
 
 class Flipbook {
 public:
