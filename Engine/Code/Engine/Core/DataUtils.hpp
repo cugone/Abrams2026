@@ -17,13 +17,32 @@
 #include <bit>
 #include <concepts>
 #include <cstdlib>
+#include <cstdint>
 #include <functional>
+#include <filesystem>
+#include <span>
 #include <string>
+#include <type_traits>
+
 
 using XMLElement = tinyxml2::XMLElement;
 using XMLAttribute = tinyxml2::XMLAttribute;
 
 namespace DataUtils {
+
+namespace Base64 {
+
+struct Base64CodecOptions {
+    bool use_filename_safe_table{false};
+};
+[[nodiscard]] std::string encode(std::span<const std::uint8_t> input, const Base64CodecOptions& options = Base64CodecOptions{}) noexcept;
+[[nodiscard]] std::string encode(std::span<const char> input) noexcept;
+[[nodiscard]] std::string encode(const std::filesystem::path& input) noexcept;
+[[nodiscard]] std::string encode(const std::string& input) noexcept;
+
+[[nodiscard]] std::string decode(std::span<const char> input, const Base64CodecOptions& options = Base64CodecOptions{}) noexcept;
+
+} //namespace Base64
 
 [[nodiscard]] constexpr inline auto ShiftLeft(uint8_t value, uint8_t distance) noexcept -> uint8_t {
     return value << distance;

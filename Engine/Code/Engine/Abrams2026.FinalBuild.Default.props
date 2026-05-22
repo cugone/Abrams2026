@@ -11,7 +11,7 @@
     </ClCompile>
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)../Thirdparty/webp/lib;$(ProjectDir)../Thirdparty/webm/lib/final;$(ProjectDir)../Thirdparty/box2d/lib;$(ProjectDir)../Thirdparty/freetype/lib/release;$(ProjectDir)../Thirdparty/zlib/lib/Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freetype.lib;libwebp.lib;libwebpdemux.lib;libwebpmux.lib;libwebm_release.lib;box2d_rd.lib;z.lib</AdditionalDependencies>
+      <AdditionalDependencies>freetype.lib;libwebp.lib;libwebpdemux.lib;libwebpmux.lib;libwebm.lib;box2d_rd.lib;z.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup />

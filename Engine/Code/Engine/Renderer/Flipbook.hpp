@@ -7,7 +7,6 @@
 
 #include <filesystem>
 #include <memory>
-#include <vector>
 
 class Flipbook {
 public:
@@ -29,7 +28,7 @@ public:
     Flipbook& operator=(Flipbook&& other) = default;
     ~Flipbook() noexcept;
 
-    void Update([[maybe_unused]] TimeUtils:: FPSeconds deltaSeconds) noexcept;
+    void Update([[maybe_unused]] TimeUtils::FPSeconds deltaSeconds) noexcept;
     void Render(const Matrix4& transform = Matrix4::I) const noexcept;
 
     Vector2 GetDimensions() const noexcept;

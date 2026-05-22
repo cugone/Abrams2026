@@ -12,7 +12,7 @@ ConstantBuffer::ConstantBuffer(const RHIDevice& owner, const buffer_t& buffer, c
 , m_buffer_size(buffer_size) {
     GUARANTEE_OR_DIE((m_buffer_size % 16) == 0, "Constant Buffer size not a multiple of 16.");
     {
-        const auto error_msg = std::string{"Constant Buffer of size "} + std::to_string(m_buffer_size) + " exceeds maximum of " + std::to_string(D3D11_REQ_CONSTANT_BUFFER_ELEMENT_COUNT) + "\n";
+        const auto error_msg = std::format("Constant Buffer of size {} exceeds maximum of {}\n", m_buffer_size, D3D11_REQ_CONSTANT_BUFFER_ELEMENT_COUNT);
         GUARANTEE_OR_DIE(!(D3D11_REQ_CONSTANT_BUFFER_ELEMENT_COUNT < m_buffer_size), error_msg.c_str());
     }
 

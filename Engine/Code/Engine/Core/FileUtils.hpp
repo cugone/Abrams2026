@@ -4,6 +4,7 @@
 #include "Engine/Core/StringUtils.hpp"
 
 #include <cstdlib>
+#include <cstdint>
 #include <filesystem>
 #include <format>
 #include <functional>
@@ -54,13 +55,25 @@ enum class KnownPathID {
     Max
 };
 
-[[nodiscard]] bool WriteBufferToFile(void* buffer, std::size_t size, std::filesystem::path filepath) noexcept;
+enum class ArchiveCompressionLevel {
+    None
+    , Speed
+    , Size
+    , Default
+};
+
+struct ArchiveBinaryFileDesc {
+    std::filesystem::path filepath;
+    std::vector<uint8_t> buffer;
+};
+
+[[nodiscard]] bool WriteBufferToFile(void* buffer, std::streamsize size, std::filesystem::path filepath) noexcept;
 [[nodiscard]] bool WriteBufferToFile(const std::string& buffer, std::filesystem::path filepath) noexcept;
 [[nodiscard]] std::optional<std::vector<uint8_t>> ReadBinaryBufferFromFile(std::filesystem::path filepath) noexcept;
 [[nodiscard]] std::optional<std::string> ReadStringBufferFromFile(std::filesystem::path filepath) noexcept;
-[[nodiscard]] std::optional<std::string> ReadSomeBinaryBufferFromFile(std::filesystem::path filepath, std::size_t pos, std::size_t count = 0u) noexcept;
+[[nodiscard]] std::optional<std::string> ReadSomeBinaryBufferFromFile(std::filesystem::path filepath, std::streampos pos, std::streamsize count = 0u) noexcept;
 [[nodiscard]] std::optional<std::string> ReadSomeBinaryBufferFromFile(std::ifstream& ifs, std::streampos pos, std::streamsize count = 0u) noexcept;
-[[nodiscard]] std::optional<std::string> ReadSomeStringBufferFromFile(std::filesystem::path filepath, std::size_t pos, std::size_t count = 0u) noexcept;
+[[nodiscard]] std::optional<std::string> ReadSomeStringBufferFromFile(std::filesystem::path filepath, std::streampos pos, std::streamsize count = 0u) noexcept;
 [[nodiscard]] std::optional<std::string> ReadSomeStringBufferFromFile(std::ifstream& ifs, std::streampos pos, std::streamsize count = 0u) noexcept;
 [[nodiscard]] bool CreateFolders(const std::filesystem::path& filepath) noexcept;
 [[nodiscard]] bool IsSystemPathId(const KnownPathID& pathid) noexcept;
@@ -85,6 +98,10 @@ enum class KnownPathID {
 [[nodiscard]] std::size_t CountFilesInFolders(const std::filesystem::path& folderpath, const std::string& validExtensionList = std::string{}, bool recursive = false) noexcept;
 void RemoveExceptMostRecentFiles(const std::filesystem::path& folderpath, std::size_t mostRecentCountToKeep, const std::string& validExtensionList = std::string{}) noexcept;
 [[nodiscard]] std::vector<std::filesystem::path> GetAllPathsInFolders(const std::filesystem::path& folderpath, const std::string& validExtensionList = std::string{}, bool recursive = false) noexcept;
+[[nodiscard]] bool ArchiveFiles(const std::filesystem::path& output, const std::vector<std::filesystem::path>& filepaths, FileUtils::ArchiveCompressionLevel compression = FileUtils::ArchiveCompressionLevel::Default) noexcept;
+[[nodiscard]] bool ArchiveFilesInFolder(const std::filesystem::path& output, const std::filesystem::path& folderpath, FileUtils::ArchiveCompressionLevel compression = FileUtils::ArchiveCompressionLevel::Default, bool recursive = false) noexcept;
+[[nodiscard]] bool ArchiveFilesFromMemory(const std::filesystem::path& output, const std::vector<ArchiveBinaryFileDesc>& buffersToArchive, FileUtils::ArchiveCompressionLevel compression = ArchiveCompressionLevel::Default) noexcept;
+[[nodiscard]] bool AddFileToArchiveFromMemory(const std::filesystem::path& archiveToAppend, const std::vector<uint8_t>& buffer, FileUtils::ArchiveCompressionLevel compression = ArchiveCompressionLevel::Default) noexcept;
 
 namespace detail {
 

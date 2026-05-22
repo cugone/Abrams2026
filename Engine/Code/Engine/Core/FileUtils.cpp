@@ -17,11 +17,20 @@
 #include <iostream>
 #include <sstream>
 
+#include <Thirdparty/zlib/zlib.h>
+#include <Thirdparty/zlib/unzip.h>
+#include <Thirdparty/zlib/zip.h>
+
+
 namespace FileUtils {
+
+void ArchiveFile_helper(zipFile zipf, const std::filesystem::path& output, const std::vector<std::filesystem::path>& filepaths, FileUtils::ArchiveCompressionLevel compression = ArchiveCompressionLevel::Default) noexcept;
+void ArchiveFile_binaryhelper(zipFile zipf, const std::filesystem::path& output, const std::vector<ArchiveBinaryFileDesc>& fileBuffers, FileUtils::ArchiveCompressionLevel compression = ArchiveCompressionLevel::Default) noexcept;
+int ArchiveCompressionLevelToZLibCompressionLevel(FileUtils::ArchiveCompressionLevel compression) noexcept;
 
 GUID GetKnownPathIdForOS(const KnownPathID& pathid) noexcept;
 
-bool WriteBufferToFile(void* buffer, std::size_t size, std::filesystem::path filepath) noexcept {
+bool WriteBufferToFile(void* buffer, std::streamsize size, std::filesystem::path filepath) noexcept {
     namespace FS = std::filesystem;
     filepath = FS::absolute(filepath);
     filepath.make_preferred();
@@ -77,7 +86,7 @@ std::optional<std::vector<uint8_t>> ReadBinaryBufferFromFile(std::filesystem::pa
     const auto byte_size = FS::file_size(filepath);
     std::vector<uint8_t> out_buffer{};
     out_buffer.resize(byte_size);
-    if(std::ifstream ifs{filepath, std::ios_base::binary}; ifs.read(reinterpret_cast<char*>(out_buffer.data()), out_buffer.size())) {
+    if(std::ifstream ifs{filepath, std::ios_base::binary}; ifs.read(reinterpret_cast<char*>(out_buffer.data()), static_cast<std::streamsize>(out_buffer.size()))) {
         return out_buffer;
     }
     return {};
@@ -113,7 +122,7 @@ std::optional<std::string> ReadStringBufferFromFile(std::filesystem::path filepa
 
 //This version of ReadSome is intended for one-time-only reads of a portion of a TEXT file.
 //If you want multiple reads use the ifstream version.
-[[nodiscard]] std::optional<std::string> ReadSomeStringBufferFromFile(std::filesystem::path filepath, std::size_t pos, std::size_t count /*= 0u*/) noexcept {
+[[nodiscard]] std::optional<std::string> ReadSomeStringBufferFromFile(std::filesystem::path filepath, std::streampos pos, std::streamsize count /*= 0u*/) noexcept {
     namespace FS = std::filesystem;
     const auto initial_path_not_exist = !FS::exists(filepath);
     if(initial_path_not_exist) {
@@ -160,7 +169,7 @@ std::optional<std::string> ReadStringBufferFromFile(std::filesystem::path filepa
 //This version of ReadSome is intended for one-time-only reads of a portion of a BINARY file.
 //If you want multiple reads use the ifstream version.
 //If you do, make sure it is set to binary mode.
-[[nodiscard]] std::optional<std::string> ReadSomeBinaryBufferFromFile(std::filesystem::path filepath, std::size_t pos, std::size_t count /*= 0u*/) noexcept {
+[[nodiscard]] std::optional<std::string> ReadSomeBinaryBufferFromFile(std::filesystem::path filepath, std::streampos pos, std::streamsize count /*= 0u*/) noexcept {
     namespace FS = std::filesystem;
     const auto initial_path_not_exist = !FS::exists(filepath);
     if(initial_path_not_exist) {
@@ -628,6 +637,82 @@ std::vector<std::filesystem::path> GetAllPathsInFolders(const std::filesystem::p
     }();
 }
 
+/**
+ * Archive a collection of bytes representing files.
+ * Writes output file to disk and returns true if successful.
+ */
+bool ArchiveFilesFromMemory(const std::filesystem::path& output, const std::vector<ArchiveBinaryFileDesc>& buffersToArchive, FileUtils::ArchiveCompressionLevel compression /*= ArchiveCompressionLevel::Default*/) noexcept {
+    if(auto zipf = zipOpen64(output.string().c_str(), APPEND_STATUS_CREATE); zipf != nullptr) {
+        ArchiveFile_binaryhelper(zipf, output, buffersToArchive, compression);
+        zipClose(zipf, nullptr);
+        return true;
+    }
+    return false;
+}
+
+/**
+ * Add a file to an already existing archive.
+ */
+bool AddFileToArchiveFromMemory(const std::filesystem::path& archiveToAppend, const std::filesystem::path& filepath, const std::vector<uint8_t>& buffer, FileUtils::ArchiveCompressionLevel compression /*= ArchiveCompressionLevel::Default*/) noexcept {
+    if(std::filesystem::exists(archiveToAppend)) {
+        if(auto zipf = zipOpen64(archiveToAppend.string().c_str(), APPEND_STATUS_ADDINZIP); zipf != nullptr) {
+            const std::vector<ArchiveBinaryFileDesc> fileBuffers{ ArchiveBinaryFileDesc{filepath, buffer} };
+            ArchiveFile_binaryhelper(zipf, archiveToAppend, fileBuffers, compression);
+            zipClose(zipf, nullptr);
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * Add a collection of file buffers to an already existing archive.
+ */
+bool AddFilesToArchiveFromMemory(const std::filesystem::path& archiveToAppend, const std::vector<ArchiveBinaryFileDesc>& fileBuffers, FileUtils::ArchiveCompressionLevel compression /*= ArchiveCompressionLevel::Default*/) noexcept {
+    if(std::filesystem::exists(archiveToAppend)) {
+        if(auto zipf = zipOpen64(archiveToAppend.string().c_str(), APPEND_STATUS_ADDINZIP); zipf != nullptr) {
+            ArchiveFile_binaryhelper(zipf, archiveToAppend, fileBuffers, compression);
+            zipClose(zipf, nullptr);
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * Archive a collection of individual files.
+ * Writes output file to disk and returns true if successful.
+ */
+bool ArchiveFiles(const std::filesystem::path& output, const std::vector<std::filesystem::path>& filepaths, FileUtils::ArchiveCompressionLevel compression /*= ArchiveCompressionLevel::None*/) noexcept {
+    if(auto zipf = zipOpen64(output.string().c_str(), APPEND_STATUS_CREATE); zipf != nullptr) {
+        ArchiveFile_helper(zipf, output, filepaths, compression);
+        zipClose(zipf, nullptr);
+        return true;
+    }
+    auto* logger = ServiceLocator::get<IFileLoggerService>();
+    logger->LogWarnLine(std::format("ArchiveFiles: Failed to create an empty archive file from {}.", output));
+    return false;
+}
+
+/**
+ * Archive all files in a folder.
+ * Writes output file to disk and returns true if successful.
+ */
+bool ArchiveFilesInFolder(const std::filesystem::path& output, const std::filesystem::path& folderpath, FileUtils::ArchiveCompressionLevel compression /*= ArchiveCompressionLevel::None*/, bool recursive /*= false*/) noexcept {
+    auto* logger = ServiceLocator::get<IFileLoggerService>();
+    if(std::filesystem::is_directory(folderpath)) {
+        if(auto zipf = zipOpen64(output.string().c_str(), APPEND_STATUS_CREATE); zipf != nullptr) {
+            const auto filepaths = FileUtils::GetAllPathsInFolders(folderpath, std::string{}, recursive);
+            ArchiveFile_helper(zipf, output, filepaths, compression);
+            zipClose(zipf, nullptr);
+            return true;
+        }
+        logger->LogWarnLine(std::format("ArchiveFiles: Failed to create an empty archive file from {}.", output));
+    }
+    logger->LogWarnLine(std::format("ArchiveFilesInFolder: {} is not a directory.", folderpath));
+    return false;
+}
+
 void FileUtils::RemoveExceptMostRecentFiles(const std::filesystem::path& folderpath, std::size_t mostRecentCountToKeep, const std::string& validExtensionList /*= std::string{}*/) noexcept {
     if(!IsSafeWritePath(folderpath)) {
         return;
@@ -644,6 +729,54 @@ void FileUtils::RemoveExceptMostRecentFiles(const std::filesystem::path& folderp
         for(auto& p : paths) {
             FS::remove(p);
         }
+    }
+}
+
+void ArchiveFile_helper(zipFile zipf, const std::filesystem::path& output, const std::vector<std::filesystem::path>& filepaths, FileUtils::ArchiveCompressionLevel compression /*= ArchiveCompressionLevel::Default*/) noexcept {
+    const auto compression_level = ArchiveCompressionLevelToZLibCompressionLevel(compression);
+    auto* logger = ServiceLocator::get<IFileLoggerService>();
+    for(const auto& cur_file : filepaths) {
+        const auto& buffer = FileUtils::ReadBinaryBufferFromFile(cur_file);
+        const auto& cur_filepath_as_string = cur_file.string();
+        const auto& cur_file_filename = cur_file.filename();
+        zip_fileinfo zipfi{};
+        if(const auto open_result = zipOpenNewFileInZip64(zipf, cur_filepath_as_string.c_str(), &zipfi, nullptr, 0, nullptr, 0, nullptr, Z_DEFLATED, compression_level, true); open_result != ZIP_OK) {
+            logger->LogWarnLine(std::format("minizip could not inject file {} to {}", cur_file_filename, output));
+        }
+        if(buffer.has_value()) {
+            if(const auto write_result = zipWriteInFileInZip(zipf, buffer->data(), static_cast<unsigned int>(buffer->size())); write_result != ZIP_OK) {
+                logger->LogWarnLine(std::format("minizip could not append file {} to {}", cur_file_filename, output));
+            }
+        }
+        zipCloseFileInZip(zipf);
+    }
+}
+
+int ArchiveCompressionLevelToZLibCompressionLevel(FileUtils::ArchiveCompressionLevel compression) noexcept {
+    switch(compression) {
+    case ArchiveCompressionLevel::None: return Z_NO_COMPRESSION;
+    case ArchiveCompressionLevel::Size: return Z_BEST_COMPRESSION;
+    case ArchiveCompressionLevel::Speed: return Z_BEST_SPEED;
+    case ArchiveCompressionLevel::Default: return Z_DEFAULT_COMPRESSION;
+    default: return Z_DEFAULT_COMPRESSION;
+    }
+}
+
+void ArchiveFile_binaryhelper(zipFile zipf, const std::filesystem::path& output, const std::vector<ArchiveBinaryFileDesc>& fileBuffers, FileUtils::ArchiveCompressionLevel compression /*= ArchiveCompressionLevel::Default*/) noexcept {
+    const auto compression_level = ArchiveCompressionLevelToZLibCompressionLevel(compression);
+    auto* logger = ServiceLocator::get<IFileLoggerService>();
+    for(const auto& cur_file : fileBuffers) {
+        const auto& buffer = cur_file.buffer;
+        const auto& cur_filepath_as_string = cur_file.filepath.string();
+        const auto& cur_file_filename = cur_file.filepath.filename();
+        zip_fileinfo zipfi{};
+        if(const auto open_result = zipOpenNewFileInZip64(zipf, cur_filepath_as_string.c_str(), &zipfi, nullptr, 0, nullptr, 0, nullptr, Z_DEFLATED, compression_level, true); open_result != ZIP_OK) {
+            logger->LogWarnLine(std::format("minizip could not inject file {} to {}", cur_file_filename, output));
+        }
+        if(const auto write_result = zipWriteInFileInZip(zipf, buffer.data(), static_cast<unsigned int>(buffer.size())); write_result != ZIP_OK) {
+            logger->LogWarnLine(std::format("minizip could not append file {} to {}", cur_file_filename, output));
+        }
+        zipCloseFileInZip(zipf);
     }
 }
 
