@@ -5,7 +5,6 @@ We welcome any contributions you may have to the project.
 
 Current areas lacking in features are:
 - Physics Subsystem
-- WebP integration
 - WebM integration
 
 If you'd like to contribute, have a question, or would like to submit a feature request, please [open an Issue](https://github.com/cugone/Abrams2026/issues/new/choose) first so it may be discussed before any major work is done. You don't want to spend a lot of time on a feature only to have it rejected.
