@@ -54,6 +54,8 @@ public:
     bool IsAtFrameEnd(std::size_t frameIdx) const noexcept;
     void Restart() noexcept;
 
+    const Texture* const DebugGetTexture() const noexcept;
+
 protected:
 private:
     bool Load(const GifDesc& desc) noexcept;
