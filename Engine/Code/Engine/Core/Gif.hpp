@@ -54,7 +54,7 @@ public:
     bool IsAtFrameEnd(std::size_t frameIdx) const noexcept;
     void Restart() noexcept;
 
-    const Texture* const DebugGetTexture() const noexcept;
+    Texture* const DebugGetTexture() const noexcept;
 
 protected:
 private:

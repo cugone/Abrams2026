@@ -289,7 +289,7 @@ void Gif::Restart() noexcept {
     }
 }
 
-const Texture* const Gif::DebugGetTexture() const noexcept {
+Texture* const Gif::DebugGetTexture() const noexcept {
     return m_texture;
 }
 
