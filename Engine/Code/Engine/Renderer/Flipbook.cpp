@@ -8,21 +8,21 @@
 #include "Engine/Services/IRendererService.hpp"
 
 Flipbook::Flipbook(std::filesystem::path folderpath, unsigned int framesPerSecond /*= 3*/) noexcept
-: m_texture{ServiceLocator::get<IRendererService>()->Create2DTextureArrayFromFolder(folderpath)}
-, m_frameRate(framesPerSecond)
+: m_texture{nullptr}
+, m_frameRate{framesPerSecond}
 {
+    auto* r = ServiceLocator::get<IRendererService>();
+    auto t = r->Create2DTextureArrayFromFolder(folderpath);
+    GUARANTEE_OR_DIE(r->RegisterTexture(folderpath.string(), std::move(t)), "Failed to register flipbook texture.");
+
+    m_texture = r->GetTexture(folderpath.string());
     m_frameDimensions = IntVector2{m_texture->GetDimensions()};
 }
 
-Flipbook::Flipbook(std::unique_ptr<Texture>&& texture, unsigned int framesPerSecond /*= 3*/) noexcept
-: m_texture{std::move(texture)}
-, m_frameRate(framesPerSecond)
-{
-    /* DO NOTHING */
-}
+Flipbook::Flipbook(Texture* const texture, unsigned int framesPerSecond /*= 3*/) noexcept
+: m_texture{texture}
+, m_frameRate{framesPerSecond} {
 
-Flipbook::~Flipbook() noexcept {
-    m_texture.reset();
 }
 
 void Flipbook::Update([[maybe_unused]] TimeUtils::FPSeconds deltaSeconds) noexcept {
@@ -65,7 +65,7 @@ void Flipbook::Render(const Matrix4& transform /*= Matrix4::I*/) const noexcept 
         cb.Update(*(r->GetDeviceContext()), &data);
     }
     r->SetMaterial(mat);
-    r->SetTexture(m_texture.get());
+    r->SetTexture(m_texture);
     r->DrawQuad2D(transform);
 }
  

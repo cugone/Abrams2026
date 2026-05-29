@@ -21,12 +21,12 @@ public:
 
     Flipbook() = delete;
     Flipbook(std::filesystem::path folderpath, unsigned int framesPerSecond = 3) noexcept;
-    Flipbook(std::unique_ptr<Texture>&& texture, unsigned int framesPerSecond = 3) noexcept;
+    Flipbook(Texture* const texture, unsigned int framesPerSecond = 3) noexcept;
     Flipbook(const Flipbook& other) = default;
     Flipbook(Flipbook&& other) = default;
     Flipbook& operator=(const Flipbook& other) = default;
     Flipbook& operator=(Flipbook&& other) = default;
-    ~Flipbook() noexcept;
+    ~Flipbook() noexcept = default;
 
     void Update([[maybe_unused]] TimeUtils::FPSeconds deltaSeconds) noexcept;
     void Render(const Matrix4& transform = Matrix4::I) const noexcept;
@@ -48,7 +48,7 @@ public:
 protected:
 private:
     Playmode m_playmode{Playmode::Forward};
-    std::unique_ptr<Texture> m_texture{};
+    Texture* m_texture{nullptr};
     int m_currentFrame{0};
     IntVector2 m_frameDimensions{};
     Stopwatch m_frameRate{};

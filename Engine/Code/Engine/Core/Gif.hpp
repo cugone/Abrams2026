@@ -54,11 +54,13 @@ public:
     bool IsAtFrameEnd(std::size_t frameIdx) const noexcept;
     void Restart() noexcept;
 
+    Texture* const DebugGetTexture() const noexcept;
+
 protected:
 private:
     bool Load(const GifDesc& desc) noexcept;
 
-    std::vector<TimeUtils::FPMilliseconds> m_frameDelays{};
+    std::vector<std::chrono::milliseconds> m_frameDelays{};
     Texture* m_texture{};
     TimeUtils::FPSeconds m_duration{};
     TimeUtils::FPSeconds m_frameDuration{};

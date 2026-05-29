@@ -95,7 +95,7 @@ bool Gif::Load(std::filesystem::path filepath) noexcept {
             logger->LogLineAndFlush(std::format("stbi failed to load .gif from file: {}", filepath));
             return false;
         }
-        m_frameDelays = std::vector<TimeUtils::FPMilliseconds>(delays, delays + frame_count);
+        m_frameDelays = std::vector<std::chrono::milliseconds>(delays, delays + frame_count);
         m_totalFrames = frame_count;
         m_endFrame = (std::min)(m_endFrame, m_totalFrames - std::size_t{1u});
         m_currentFrame = m_startFrame;
@@ -104,7 +104,7 @@ bool Gif::Load(std::filesystem::path filepath) noexcept {
             m_currentFrame = m_endFrame;
             m_direction = -1;
         }
-        m_duration = TimeUtils::FPSeconds{std::accumulate(std::cbegin(m_frameDelays), std::cend(m_frameDelays), TimeUtils::FPMilliseconds::zero(), [&](const auto& a, const auto& b) { return TimeUtils::FPMilliseconds(a.count() + b.count()); })};
+        m_duration = std::chrono::milliseconds{std::accumulate(std::cbegin(m_frameDelays), std::cend(m_frameDelays), std::chrono::milliseconds::zero(), [&](const auto& a, const auto& b) { return a + b; })};
         if(m_texture = r->GetTexture(filepath.string()); m_texture != nullptr) {
             return true;
         }
@@ -287,6 +287,10 @@ void Gif::Restart() noexcept {
         m_currentFrame = 0;
         break;
     }
+}
+
+Texture* const Gif::DebugGetTexture() const noexcept {
+    return m_texture;
 }
 
 } // namespace FileUtils
