@@ -188,6 +188,10 @@ std::size_t Gif::GetFrameCount() const noexcept {
     return m_totalFrames;
 }
 
+TimeUtils::FPSeconds Gif::GetDuration() const noexcept {
+    return m_duration;
+}
+
 void Gif::SetImage(std::filesystem::path newFilepath) noexcept {
     SetFrameRange(0u, static_cast<std::size_t>(-1));
     Load(newFilepath);
