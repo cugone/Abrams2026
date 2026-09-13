@@ -59,5 +59,5 @@ private:
     Stopwatch m_frameRate{};
     float m_playRate{1.0f};
     //0b0000'FBSP
-    uint8_t m_state{};
+    uint8_t m_state{0b1000};
 };
