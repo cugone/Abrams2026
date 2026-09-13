@@ -1550,6 +1550,84 @@ IntVector2 Wrap(const IntVector2& valuesToWrap, const IntVector2& minValues, con
     return IntVector2(x, y);
 }
 
+std::size_t WrapCount(const Vector4& valuesToWrap, const Vector4& minValues, const Vector4& maxValues, Vector4& outValues) {
+    float x{0.0f};
+    float y{0.0f};
+    float z{0.0f};
+    float w{0.0f};
+    const auto x_count = WrapCount(valuesToWrap.x, minValues.x, maxValues.x, x);
+    const auto y_count = WrapCount(valuesToWrap.y, minValues.y, maxValues.y, y);
+    const auto z_count = WrapCount(valuesToWrap.z, minValues.z, maxValues.z, z);
+    const auto w_count = WrapCount(valuesToWrap.w, minValues.w, maxValues.w, w);
+    outValues = Vector4(x, y, z, w);
+    return x_count + y_count + z_count + w_count;
+}
+
+std::size_t WrapCount(const Vector3& valuesToWrap, const Vector3& minValues, const Vector3& maxValues, Vector3& outValues) {
+    float x{0.0f};
+    float y{0.0f};
+    float z{0.0f};
+    const auto x_count = WrapCount(valuesToWrap.x, minValues.x, maxValues.x, x);
+    const auto y_count = WrapCount(valuesToWrap.y, minValues.y, maxValues.y, y);
+    const auto z_count = WrapCount(valuesToWrap.z, minValues.z, maxValues.z, z);
+    outValues = Vector3(x, y, z);
+    return x_count + y_count + z_count;
+}
+
+std::size_t WrapCount(const Vector2& valuesToWrap, const Vector2& minValues, const Vector2& maxValues, Vector2& outValues) {
+    float x{0.0f};
+    float y{0.0f};
+    const auto x_count = WrapCount(valuesToWrap.x, minValues.x, maxValues.x, x);
+    const auto y_count = WrapCount(valuesToWrap.y, minValues.y, maxValues.y, y);
+    outValues = Vector2(x, y);
+    return x_count + y_count;
+}
+
+std::size_t WrapCount(const IntVector4& valuesToWrap, const IntVector4& minValues, const IntVector4& maxValues, IntVector4& outValues) {
+    int x{0};
+    int y{0};
+    int z{0};
+    int w{0};
+    const auto x_count = WrapCount(valuesToWrap.x, minValues.x, maxValues.x, x);
+    const auto y_count = WrapCount(valuesToWrap.y, minValues.y, maxValues.y, y);
+    const auto z_count = WrapCount(valuesToWrap.z, minValues.z, maxValues.z, z);
+    const auto w_count = WrapCount(valuesToWrap.w, minValues.w, maxValues.w, w);
+    outValues = IntVector4(x, y, z, w);
+    return x_count + y_count + z_count + w_count;
+}
+
+std::size_t WrapCount(const IntVector3& valuesToWrap, const IntVector3& minValues, const IntVector3& maxValues, IntVector3& outValues) {
+    int x{0};
+    int y{0};
+    int z{0};
+    const auto x_count = WrapCount(valuesToWrap.x, minValues.x, maxValues.x, x);
+    const auto y_count = WrapCount(valuesToWrap.y, minValues.y, maxValues.y, y);
+    const auto z_count = WrapCount(valuesToWrap.z, minValues.z, maxValues.z, z);
+    outValues = IntVector3(x, y, z);
+    return x_count + y_count + z_count;
+}
+
+std::size_t WrapCount(const IntVector2& valuesToWrap, const IntVector2& minValues, const IntVector2& maxValues, IntVector2& outValues) {
+    int x{0};
+    int y{0};
+    const auto x_count = WrapCount(valuesToWrap.x, minValues.x, maxValues.x, x);
+    const auto y_count = WrapCount(valuesToWrap.y, minValues.y, maxValues.y, y);
+    outValues = IntVector2(x, y);
+    return x_count + y_count;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 void TurnToward(float& currentDegrees, float goalDegrees, float maxTurnDegrees) {
     float signedAngularDistance = CalcShortestAngularDistance(currentDegrees, goalDegrees);
     if(std::fabs(signedAngularDistance) <= maxTurnDegrees) {
