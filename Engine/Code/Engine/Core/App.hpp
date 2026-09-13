@@ -308,6 +308,8 @@ void App<T>::Initialize() noexcept {
     g_theVideoSystem->Initialize();
     g_thePhysicsSystem->Initialize();
     g_theGame->Initialize();
+    g_theRenderer->GetOutput()->GetWindow()->SetForegroundWindow();
+    g_theRenderer->GetOutput()->GetWindow()->SetFocus();
 }
 
 template<GameType T>
