@@ -24,8 +24,8 @@ public:
     };
 
     Flipbook() = delete;
-    Flipbook(std::filesystem::path folderpath, unsigned int framesPerSecond = 3) noexcept;
-    Flipbook(Texture* const texture, unsigned int framesPerSecond = 3) noexcept;
+    explicit Flipbook(std::filesystem::path folderpath, TimeUtils::FPSeconds secondsPerFrame = TimeUtils::FPSeconds{0.0333333333f}) noexcept;
+    explicit Flipbook(Texture* const texture, TimeUtils::FPSeconds secondsPerFrame = TimeUtils::FPSeconds{0.03333333333f}) noexcept;
     explicit Flipbook(const FileUtils::Gif& fromGif) noexcept;
     Flipbook(const Flipbook& other) = default;
     Flipbook(Flipbook&& other) = default;

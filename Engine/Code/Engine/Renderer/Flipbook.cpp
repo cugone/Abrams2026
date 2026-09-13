@@ -1,16 +1,17 @@
 #include "Engine/Renderer/Flipbook.hpp"
 
 #include "Engine/Core/DataUtils.hpp"
+#include "Engine/Core/Gif.hpp"
 
 #include "Engine/Renderer/TextureArray2D.hpp"
 
 #include "Engine/Services/ServiceLocator.hpp"
 #include "Engine/Services/IRendererService.hpp"
 
-Flipbook::Flipbook(std::filesystem::path folderpath, unsigned int framesPerSecond /*= 3*/) noexcept
-: m_texture{nullptr}
-, m_frameRate{framesPerSecond}
-{
+#include <memory>
+
+Flipbook::Flipbook(std::filesystem::path folderpath, TimeUtils::FPSeconds secondsPerFrame /*= TimeUtils::FPSeconds{0.03333333333f}*/) noexcept
+: m_frameRate{TimeUtils::FPSeconds{secondsPerFrame}} {
     auto* r = ServiceLocator::get<IRendererService>();
     auto t = r->Create2DTextureArrayFromFolder(folderpath);
     GUARANTEE_OR_DIE(r->RegisterTexture(folderpath.string(), std::move(t)), "Failed to register flipbook texture.");
@@ -19,9 +20,12 @@ Flipbook::Flipbook(std::filesystem::path folderpath, unsigned int framesPerSecon
     m_frameDimensions = IntVector2{m_texture->GetDimensions()};
 }
 
-Flipbook::Flipbook(Texture* const texture, unsigned int framesPerSecond /*= 3*/) noexcept
+Flipbook::Flipbook(Texture* const texture, TimeUtils::FPSeconds secondsPerFrame /*= TimeUtils::FPSeconds{0.03333333333f}*/) noexcept
 : m_texture{texture}
-, m_frameRate{framesPerSecond} {
+, m_frameDimensions{IntVector2{m_texture->GetDimensions()}}
+, m_frameRate{TimeUtils::FPSeconds{secondsPerFrame}} {
+    /* DO NOTHING */
+}
 
 Flipbook::Flipbook(const FileUtils::Gif& fromGif) noexcept
 : m_texture{fromGif.DebugGetTexture()}
