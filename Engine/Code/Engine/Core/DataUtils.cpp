@@ -348,7 +348,7 @@ std::string encode(std::span<const std::uint8_t> input, const Base64CodecOptions
 
 namespace detail {
 
-// Reverse lookup table (ASCII → 6-bit value)
+// Reverse lookup table (ASCII -> 6-bit value)
 static constexpr std::array<std::uint8_t, 256> make_table_default() {
     std::array<std::uint8_t, 256> table{};
 
@@ -366,7 +366,7 @@ static constexpr std::array<std::uint8_t, 256> make_table_default() {
     return table;
 }
 
-// Reverse lookup table (ASCII → 6-bit value)
+// Reverse lookup table (ASCII -> 6-bit value)
 static constexpr std::array<std::uint8_t, 256> make_table_filenames() {
     std::array<std::uint8_t, 256> table{};
 
