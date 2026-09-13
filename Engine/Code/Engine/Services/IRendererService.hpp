@@ -134,7 +134,8 @@ public:
     [[nodiscard]] virtual std::unique_ptr<AnimatedSprite> CreateAnimatedSprite(std::shared_ptr<SpriteSheet> sheet, const IntVector2& startSpriteCoords = IntVector2::Zero) noexcept = 0;
     [[nodiscard]] virtual std::unique_ptr<AnimatedSprite> CreateAnimatedSprite(std::shared_ptr<SpriteSheet> sheet, const XMLElement& elem) noexcept = 0;
     [[nodiscard]] virtual std::unique_ptr<AnimatedSprite> CreateAnimatedSprite(const XMLElement& elem) noexcept = 0;
-    [[nodiscard]] virtual std::unique_ptr<Flipbook> CreateFlipbookFromFolder(std::filesystem::path folderpath, unsigned int framesPerSecond) noexcept = 0;
+    [[nodiscard]] virtual std::unique_ptr<Flipbook> CreateFlipbookFromFolder(std::filesystem::path folderpath, TimeUtils::FPSeconds secondsPerFrame) noexcept = 0;
+    [[nodiscard]] virtual std::unique_ptr<Flipbook> CreateFlipbookFromGif([[maybe_unused]] const FileUtils::Gif& gif) noexcept = 0;
 
     virtual void ClearRenderTargets(const RenderTargetType& rtt) noexcept = 0;
     virtual void SetRenderTarget(FrameBuffer& frameBuffer) noexcept = 0;
@@ -431,7 +432,7 @@ public:
     [[nodiscard]] std::unique_ptr<Texture> Create2DTextureFromMemory([[maybe_unused]] const std::vector<Rgba>& data, [[maybe_unused]] unsigned int width = 1, [[maybe_unused]] unsigned int height = 1, [[maybe_unused]] const BufferUsage& bufferUsage = BufferUsage::Static, [[maybe_unused]] const BufferBindUsage& bindUsage = BufferBindUsage::Shader_Resource, [[maybe_unused]] const ImageFormat& imageFormat = ImageFormat::R8G8B8A8_UNorm) const noexcept override { return {}; }
     [[nodiscard]] std::unique_ptr<Texture> Create2DTextureFromMemory([[maybe_unused]] const void* data, [[maybe_unused]] std::size_t elementSize, [[maybe_unused]] unsigned int width = 1, [[maybe_unused]] unsigned int height = 1, [[maybe_unused]] const BufferUsage& bufferUsage = BufferUsage::Static, [[maybe_unused]] const BufferBindUsage& bindUsage = BufferBindUsage::Shader_Resource, [[maybe_unused]] const ImageFormat& imageFormat = ImageFormat::R8G8B8A8_UNorm) const noexcept override { return {}; }
     [[nodiscard]] std::unique_ptr<Texture> Create2DTextureArrayFromMemory([[maybe_unused]] const unsigned char* data, [[maybe_unused]] unsigned int width = 1, [[maybe_unused]] unsigned int height = 1, [[maybe_unused]] unsigned int depth = 1, [[maybe_unused]] const BufferUsage& bufferUsage = BufferUsage::Static, [[maybe_unused]] const BufferBindUsage& bindUsage = BufferBindUsage::Shader_Resource, [[maybe_unused]] const ImageFormat& imageFormat = ImageFormat::R8G8B8A8_UNorm) noexcept override { return {}; }
-    [[nodiscard]] std::unique_ptr<Texture> Create2DTextureArrayFromFolder([[maybe_unused]] const std::filesystem::path folderpath) noexcept { return {}; }
+    [[nodiscard]] std::unique_ptr<Texture> Create2DTextureArrayFromFolder([[maybe_unused]] const std::filesystem::path folderpath) noexcept override { return {}; }
     [[nodiscard]] Texture* Create3DTexture([[maybe_unused]] std::filesystem::path filepath, [[maybe_unused]] const IntVector3& dimensions, [[maybe_unused]] const BufferUsage& bufferUsage, [[maybe_unused]] const BufferBindUsage& bindUsage, [[maybe_unused]] const ImageFormat& imageFormat) noexcept override { return nullptr; }
     [[nodiscard]] std::unique_ptr<Texture> Create3DTextureFromMemory([[maybe_unused]] const unsigned char* data, [[maybe_unused]] unsigned int width = 1, [[maybe_unused]] unsigned int height = 1, [[maybe_unused]] unsigned int depth = 1, [[maybe_unused]] const BufferUsage& bufferUsage = BufferUsage::Static, [[maybe_unused]] const BufferBindUsage& bindUsage = BufferBindUsage::Shader_Resource, [[maybe_unused]] const ImageFormat& imageFormat = ImageFormat::R8G8B8A8_UNorm) noexcept override { return {}; }
     [[nodiscard]] std::unique_ptr<Texture> Create3DTextureFromMemory([[maybe_unused]] const std::vector<Rgba>& data, [[maybe_unused]] unsigned int width = 1, [[maybe_unused]] unsigned int height = 1, [[maybe_unused]] unsigned int depth = 1, [[maybe_unused]] const BufferUsage& bufferUsage = BufferUsage::Static, [[maybe_unused]] const BufferBindUsage& bindUsage = BufferBindUsage::Shader_Resource, [[maybe_unused]] const ImageFormat& imageFormat = ImageFormat::R8G8B8A8_UNorm) noexcept override { return {}; }
@@ -449,7 +450,8 @@ public:
     [[nodiscard]] std::unique_ptr<AnimatedSprite> CreateAnimatedSprite([[maybe_unused]] std::shared_ptr<SpriteSheet> sheet, [[maybe_unused]] const IntVector2& startSpriteCoords = IntVector2::Zero) noexcept override { return {}; }
     [[nodiscard]] std::unique_ptr<AnimatedSprite> CreateAnimatedSprite([[maybe_unused]] std::shared_ptr<SpriteSheet> sheet, [[maybe_unused]] const XMLElement& elem) noexcept override { return {}; }
     [[nodiscard]] std::unique_ptr<AnimatedSprite> CreateAnimatedSprite([[maybe_unused]] const XMLElement& elem) noexcept override { return {}; }
-    [[nodiscard]] std::unique_ptr<Flipbook> CreateFlipbookFromFolder([[maybe_unused]] std::filesystem::path folderpath, [[maybe_unused]] unsigned int framesPerSecond) noexcept override { return {}; };
+    [[nodiscard]] std::unique_ptr<Flipbook> CreateFlipbookFromFolder([[maybe_unused]] std::filesystem::path folderpath, [[maybe_unused]] TimeUtils::FPSeconds secondsPerFrame) noexcept override { return {}; };
+    [[nodiscard]] std::unique_ptr<Flipbook> CreateFlipbookFromGif([[maybe_unused]] const FileUtils::Gif& gif) noexcept override { return {}; };
 
     void ClearRenderTargets([[maybe_unused]] const RenderTargetType& rtt) noexcept override {}
     void SetRenderTarget([[maybe_unused]] FrameBuffer& frameBuffer) noexcept override {}

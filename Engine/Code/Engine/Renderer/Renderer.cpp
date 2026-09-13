@@ -1419,7 +1419,14 @@ std::unique_ptr<Flipbook> Renderer::CreateFlipbookFromFolder(std::filesystem::pa
 #ifdef PROFILE_BUILD
     ZoneScopedC(0xFF0000);
 #endif
-    return std::make_unique<Flipbook>(folderpath, framesPerSecond);
+    return std::make_unique<Flipbook>(folderpath, secondsPerFrame);
+}
+
+std::unique_ptr<Flipbook> Renderer::CreateFlipbookFromGif(const FileUtils::Gif& gif) noexcept {
+#ifdef PROFILE_BUILD
+    ZoneScopedC(0xFF0000);
+#endif
+    return std::make_unique<Flipbook>(gif);
 }
 
 std::shared_ptr<SpriteSheet> Renderer::CreateSpriteSheet(const XMLElement& elem) noexcept {
