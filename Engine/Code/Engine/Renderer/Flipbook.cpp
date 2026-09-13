@@ -23,6 +23,11 @@ Flipbook::Flipbook(Texture* const texture, unsigned int framesPerSecond /*= 3*/)
 : m_texture{texture}
 , m_frameRate{framesPerSecond} {
 
+Flipbook::Flipbook(const FileUtils::Gif& fromGif) noexcept
+: m_texture{fromGif.DebugGetTexture()}
+, m_frameDimensions{IntVector2{m_texture->GetDimensions()}}
+, m_frameRate{TimeUtils::FPSeconds{fromGif.GetDuration().count() / static_cast<float>(fromGif.GetFrameCount())}} {
+    /* DO NOTHING */
 }
 
 void Flipbook::Update([[maybe_unused]] TimeUtils::FPSeconds deltaSeconds) noexcept {

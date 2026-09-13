@@ -6,7 +6,11 @@
 #include "Engine/Renderer/Texture.hpp"
 
 #include <filesystem>
-#include <memory>
+
+namespace FileUtils
+{
+class Gif;
+}
 
 class Flipbook {
 public:
@@ -22,6 +26,7 @@ public:
     Flipbook() = delete;
     Flipbook(std::filesystem::path folderpath, unsigned int framesPerSecond = 3) noexcept;
     Flipbook(Texture* const texture, unsigned int framesPerSecond = 3) noexcept;
+    explicit Flipbook(const FileUtils::Gif& fromGif) noexcept;
     Flipbook(const Flipbook& other) = default;
     Flipbook(Flipbook&& other) = default;
     Flipbook& operator=(const Flipbook& other) = default;
