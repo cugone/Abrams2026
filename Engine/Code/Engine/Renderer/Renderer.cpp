@@ -1415,7 +1415,7 @@ std::unique_ptr<AnimatedSprite> Renderer::CreateAnimatedSprite(const AnimatedSpr
     return std::make_unique<AnimatedSprite>(desc);
 }
 
-std::unique_ptr<Flipbook> Renderer::CreateFlipbookFromFolder(std::filesystem::path folderpath, unsigned int framesPerSecond) noexcept {
+std::unique_ptr<Flipbook> Renderer::CreateFlipbookFromFolder(std::filesystem::path folderpath, TimeUtils::FPSeconds secondsPerFrame) noexcept {
 #ifdef PROFILE_BUILD
     ZoneScopedC(0xFF0000);
 #endif
