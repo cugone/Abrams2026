@@ -473,6 +473,22 @@ template<typename T>
     return result;
 }
 
+[[nodiscard]] std::size_t WrapCount(const auto& valueToWrap, const auto& minValue, const auto& maxValue, auto& outValue) {
+    std::size_t count{0u};
+    auto result = decltype(maxValue + minValue){valueToWrap};
+    const auto range = decltype(maxValue - minValue){maxValue - minValue};
+    while(result < minValue) {
+        result += range;
+        ++count;
+    }
+    while(result > maxValue) {
+        result -= range;
+        ++count;
+    }
+    outValue = result;
+    return count;
+}
+
 [[nodiscard]] constexpr auto CalcShortestPeriodicDistance(const auto& startValue, const auto& endValue, const auto& minValue = 0.0f, const auto& maxValue = 360.0f) {
     const auto a = Wrap(endValue - startValue, minValue, maxValue);
     const auto b = Wrap(startValue - endValue, minValue, maxValue);
@@ -495,6 +511,15 @@ template<typename T>
 [[nodiscard]] IntVector4 Wrap(const IntVector4& valuesToWrap, const IntVector4& minValues, const IntVector4& maxValues);
 [[nodiscard]] IntVector3 Wrap(const IntVector3& valuesToWrap, const IntVector3& minValues, const IntVector3& maxValues);
 [[nodiscard]] IntVector2 Wrap(const IntVector2& valuesToWrap, const IntVector2& minValues, const IntVector2& maxValues);
+
+[[nodiscard]] std::size_t WrapCount(const Vector4& valuesToWrap, const Vector4& minValues, const Vector4& maxValues, Vector4& outValues);
+[[nodiscard]] std::size_t WrapCount(const Vector3& valuesToWrap, const Vector3& minValues, const Vector3& maxValues, Vector3& outValues);
+[[nodiscard]] std::size_t WrapCount(const Vector2& valuesToWrap, const Vector2& minValues, const Vector2& maxValues, Vector2& outValues);
+[[nodiscard]] std::size_t WrapCount(const IntVector4& valuesToWrap, const IntVector4& minValues, const IntVector4& maxValues, IntVector4& outValues);
+[[nodiscard]] std::size_t WrapCount(const IntVector3& valuesToWrap, const IntVector3& minValues, const IntVector3& maxValues, IntVector3& outValues);
+[[nodiscard]] std::size_t WrapCount(const IntVector2& valuesToWrap, const IntVector2& minValues, const IntVector2& maxValues, IntVector2& outValues);
+
+
 
 void TurnToward(float& currentDegrees, float goalDegrees, float maxTurnDegrees);
 [[nodiscard]] float CalcShortestAngularDistance(float startDegrees, float endDegrees);
