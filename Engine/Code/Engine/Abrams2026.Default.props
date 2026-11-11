@@ -33,6 +33,7 @@
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>false</EnableCOMDATFolding>
+      <AdditionalOptions>/IGNORE:4006</AdditionalOptions>
     </Link>
     <Lib />
   </ItemDefinitionGroup>

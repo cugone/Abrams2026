@@ -16,6 +16,8 @@
 
 #include "Engine/Input/InputSystem.hpp"
 
+#include "Engine/Online/SteamOnlineSystem.hpp"
+
 #include "Engine/Physics/PhysicsSystem.hpp"
 #include "Engine/Profiling/AllocationTracker.hpp"
 
@@ -35,6 +37,7 @@
 #include "Engine/Services/IRendererService.hpp"
 #include "Engine/Services/IPhysicsService.hpp"
 #include "Engine/Services/IVideoService.hpp"
+#include "Engine/Services/ISteamService.hpp"
 #include "Engine/Services/ServiceLocator.hpp"
 
 #include "Engine/System/System.hpp"
@@ -121,20 +124,22 @@ private:
     std::unique_ptr<InputSystem> m_theInputSystem{};
     std::unique_ptr<UISystem> m_theUI{};
     std::unique_ptr<AudioSystem> m_theAudioSystem{};
+    std::unique_ptr<SteamOnlineSystem> m_theSteamOnlineSystem{};
     std::unique_ptr<T> m_theGame{};
 
     static inline std::unique_ptr<App<T>> m_theApp{};
 
-    static inline NullAppService m_nullApp{};
-    static inline NullJobSystemService m_nullJobSystem{};
-    static inline NullFileLoggerService m_nullFileLogger{};
-    static inline NullConfigService m_nullConfig{};
-    static inline NullRendererService m_nullRenderer{};
-    static inline NullVideoService m_nullVideoSystem{};
-    static inline NullConsoleService m_nullConsole{};
-    static inline NullPhysicsService m_nullPhysicsSystem{};
-    static inline NullInputService m_nullInputSystem{};
-    static inline NullAudioService m_nullAudioSystem{};
+    static inline std::unique_ptr<NullAppService> m_nullApp{std::make_unique<NullAppService>()};
+    static inline std::unique_ptr<NullJobSystemService> m_nullJobSystem{std::make_unique<NullJobSystemService>()};
+    static inline std::unique_ptr<NullFileLoggerService> m_nullFileLogger{std::make_unique<NullFileLoggerService>()};
+    static inline std::unique_ptr<NullConfigService> m_nullConfig{std::make_unique<NullConfigService>()};
+    static inline std::unique_ptr<NullRendererService> m_nullRenderer{std::make_unique<NullRendererService>()};
+    static inline std::unique_ptr<NullVideoService> m_nullVideoSystem{std::make_unique<NullVideoService>()};
+    static inline std::unique_ptr<NullConsoleService> m_nullConsole{std::make_unique<NullConsoleService>()};
+    static inline std::unique_ptr<NullPhysicsService> m_nullPhysicsSystem{std::make_unique<NullPhysicsService>()};
+    static inline std::unique_ptr<NullInputService> m_nullInputSystem{std::make_unique<NullInputService>()};
+    static inline std::unique_ptr<NullAudioService> m_nullAudioSystem{std::make_unique<NullAudioService>()};
+    static inline std::unique_ptr<NullSteamService> m_nullSteamOnlineSystem{std::make_unique<NullSteamService>()};
 };
 
 namespace detail {
@@ -153,7 +158,7 @@ template<GameType T>
     const auto cmdStringW = GetCommandLineArgs();
     const auto cmdString = StringUtils::ConvertUnicodeToMultiByte(cmdStringW);
     m_theApp = std::make_unique<App<T>>(title, cmdString);
-    ServiceLocator::provide(*static_cast<IAppService*>(m_theApp.get()), m_nullApp);
+    ServiceLocator::provide(*static_cast<IAppService*>(m_theApp.get()), *static_cast<IAppService*>(m_nullApp.get()));
 }
 
 template<GameType T>
@@ -188,6 +193,7 @@ App<T>::~App() noexcept {
     if(g_theApp<T>) {
         g_theSubsystemHead = g_theApp<T>;
         m_theGame.reset();
+        m_theSteamOnlineSystem.reset();
         m_theAudioSystem.reset();
         m_theUI.reset();
         m_theInputSystem.reset();
@@ -207,33 +213,40 @@ void App<T>::SetupEngineSystemPointers() {
 #ifdef PROFILE_BUILD
     ZoneScopedC(0xFF0000);
 #endif
-    ServiceLocator::provide(*static_cast<IConfigService*>(m_theConfig.get()), m_nullConfig);
+    ServiceLocator::provide(*static_cast<IConfigService*>(m_theConfig.get()), *static_cast<IConfigService*>(m_nullConfig.get()));
 
     m_theJobSystem = std::make_unique<JobSystem>(-1, static_cast<std::size_t>(JobType::Max), std::move(std::make_unique<std::condition_variable>()));
-    ServiceLocator::provide(*static_cast<IJobSystemService*>(m_theJobSystem.get()), m_nullJobSystem);
+    ServiceLocator::provide(*static_cast<IJobSystemService*>(m_theJobSystem.get()), *static_cast<IJobSystemService*>(m_nullJobSystem.get()));
 
     m_theFileLogger = std::make_unique<FileLogger>("game");
-    ServiceLocator::provide(*static_cast<IFileLoggerService*>(m_theFileLogger.get()), m_nullFileLogger);
+    ServiceLocator::provide(*static_cast<IFileLoggerService*>(m_theFileLogger.get()), *static_cast<IFileLoggerService*>(m_nullFileLogger.get()));
 
     m_thePhysicsSystem = std::make_unique<PhysicsSystem>();
-    ServiceLocator::provide(*static_cast<IPhysicsService*>(m_thePhysicsSystem.get()), m_nullPhysicsSystem);
+    ServiceLocator::provide(*static_cast<IPhysicsService*>(m_thePhysicsSystem.get()), *static_cast<IPhysicsService*>(m_nullPhysicsSystem.get()));
 
     m_theRenderer = std::make_unique<Renderer>();
-    ServiceLocator::provide(*static_cast<IRendererService*>(m_theRenderer.get()), m_nullRenderer);
+    ServiceLocator::provide(*static_cast<IRendererService*>(m_theRenderer.get()), *static_cast<IRendererService*>(m_nullRenderer.get()));
 
     m_theVideoSystem = std::make_unique<VideoSystem>();
-    ServiceLocator::provide(*static_cast<IVideoService*>(m_theVideoSystem.get()), m_nullVideoSystem);
+    ServiceLocator::provide(*static_cast<IVideoService*>(m_theVideoSystem.get()), *static_cast<IVideoService*>(m_nullVideoSystem.get()));
 
     m_theInputSystem = std::make_unique<InputSystem>();
-    ServiceLocator::provide(*static_cast<IInputService*>(m_theInputSystem.get()), m_nullInputSystem);
+    ServiceLocator::provide(*static_cast<IInputService*>(m_theInputSystem.get()), *static_cast<IInputService*>(m_nullInputSystem.get()));
 
     m_theAudioSystem = std::make_unique<AudioSystem>();
-    ServiceLocator::provide(*static_cast<IAudioService*>(m_theAudioSystem.get()), m_nullAudioSystem);
+    ServiceLocator::provide(*static_cast<IAudioService*>(m_theAudioSystem.get()), *static_cast<IAudioService*>(m_nullAudioSystem.get()));
 
     m_theUI = std::make_unique<UISystem>();
 
     m_theConsole = std::make_unique<Console>();
-    ServiceLocator::provide(*static_cast<IConsoleService*>(m_theConsole.get()), m_nullConsole);
+    ServiceLocator::provide(*static_cast<IConsoleService*>(m_theConsole.get()), *static_cast<IConsoleService*>(m_nullConsole.get()));
+
+    m_theSteamOnlineSystem = std::make_unique<SteamOnlineSystem>();
+    #if defined(ONLINE_STEAM)
+    ServiceLocator::provide(*static_cast<ISteamService*>(m_theSteamOnlineSystem.get()), *static_cast<ISteamService*>(m_nullSteamOnlineSystem.get()));
+    #else
+    ServiceLocator::provide(*static_cast<ISteamService*>(m_nullSteamOnlineSystem.get()), *static_cast<ISteamService*>(m_nullSteamOnlineSystem.get()));
+    #endif
 
     m_theGame = std::make_unique<T>();
 
@@ -294,6 +307,15 @@ void App<T>::Initialize() noexcept {
     }
     settings.SetWindowResolution(IntVector2{width, height});
 
+    {
+        auto* steam = ServiceLocator::get<ISteamService>();
+        const auto appid = steam->GetAppId();
+        if(!steam->Initialize(appid)) {
+            g_theFileLogger->LogErrorLine(std::format("Steam Online System failed to load with AppId: {}, all future calls will be through Null Service", appid));
+            ServiceLocator::revoke<ISteamService>();
+        }
+    }
+
     g_theRenderer->Initialize();
     g_theVideoSystem->Initialize();
     g_theRenderer->SetVSync(vsync);
@@ -307,9 +329,11 @@ void App<T>::Initialize() noexcept {
     g_theAudioSystem->Initialize();
     g_theVideoSystem->Initialize();
     g_thePhysicsSystem->Initialize();
+
     g_theGame->Initialize();
     g_theRenderer->GetOutput()->GetWindow()->SetForegroundWindow();
     g_theRenderer->GetOutput()->GetWindow()->SetFocus();
+
 }
 
 template<GameType T>
@@ -332,6 +356,9 @@ void App<T>::BeginFrame() noexcept {
     g_theAudioSystem->BeginFrame();
     g_theVideoSystem->BeginFrame();
     g_thePhysicsSystem->BeginFrame();
+    if(auto* steam = ServiceLocator::get<ISteamService>(); steam != nullptr) {
+        steam->BeginFrame();
+    }
     g_theGame->BeginFrame();
     g_theRenderer->BeginFrame();
 }
@@ -347,6 +374,9 @@ void App<T>::Update(TimeUtils::FPSeconds deltaSeconds) noexcept {
     g_theAudioSystem->Update(deltaSeconds);
     g_theVideoSystem->Update(deltaSeconds);
     g_thePhysicsSystem->Update(deltaSeconds);
+    if(auto* steam = ServiceLocator::get<ISteamService>(); steam != nullptr) {
+        steam->Update(deltaSeconds);
+    }
     g_theGame->Update(deltaSeconds);
     g_theRenderer->Update(deltaSeconds);
 }
@@ -373,6 +403,9 @@ void App<T>::EndFrame() noexcept {
 #endif
     g_theUISystem->EndFrame();
     g_theGame->EndFrame();
+    if(auto* steam = ServiceLocator::get<ISteamService>(); steam != nullptr) {
+        steam->EndFrame();
+    }
     g_theConsole->EndFrame();
     g_theAudioSystem->EndFrame();
     g_theInputSystem->EndFrame();
