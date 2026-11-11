@@ -24,11 +24,11 @@ public:
 
     virtual void Enable(bool enable) = 0;
     virtual void SetGravity(const Vector2& new_gravity) = 0;
-    virtual [[nodiscard]] Vector2 GetGravity() const noexcept = 0;
+    [[nodiscard]] virtual Vector2 GetGravity() const noexcept = 0;
     virtual void SetDragCoefficients(const Vector2& k1k2) = 0;
     virtual void SetDragCoefficients(float linearCoefficient, float squareCoefficient) = 0;
-    virtual [[nodiscard]] std::pair<float, float> GetDragCoefficients() const noexcept = 0;
-    virtual [[nodiscard]] const PhysicsSystemDesc& GetWorldDescription() const noexcept = 0;
+    [[nodiscard]] virtual std::pair<float, float> GetDragCoefficients() const noexcept = 0;
+    [[nodiscard]] virtual const PhysicsSystemDesc& GetWorldDescription() const noexcept = 0;
     virtual void SetWorldDescription(const PhysicsSystemDesc& new_desc) = 0;
     virtual void EnableGravity(bool isGravityEnabled) noexcept = 0;
     virtual void EnableDrag(bool isDragEnabled) noexcept = 0;
@@ -63,8 +63,8 @@ public:
         return new_fg_ptr;
     }
 
-    virtual [[nodiscard]] const std::vector<std::unique_ptr<Joint>>& Debug_GetJoints() const noexcept = 0;
-    virtual [[nodiscard]] const std::vector<RigidBody*>& Debug_GetBodies() const noexcept = 0;
+    [[nodiscard]] virtual const std::vector<std::unique_ptr<Joint>>& Debug_GetJoints() const noexcept = 0;
+    [[nodiscard]] virtual const std::vector<RigidBody*>& Debug_GetBodies() const noexcept = 0;
 
     virtual void Debug_ShowCollision(bool show) = 0;
     virtual void Debug_ShowWorldPartition(bool show) = 0;
