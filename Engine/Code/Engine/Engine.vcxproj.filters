@@ -164,6 +164,15 @@
     <Filter Include="Thirdparty\zlib">
       <UniqueIdentifier>{130896fa-f8ea-4b73-9251-f5cee8820867}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Thirdparty\steam">
+      <UniqueIdentifier>{7f65aa9a-e7c2-4a13-8cbe-f3e8d558c8db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Thirdparty\steam\lib">
+      <UniqueIdentifier>{ed86d854-2d4f-4db2-9106-842c7ce01966}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Online">
+      <UniqueIdentifier>{3814a14b-15da-4352-b83c-a02005292913}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Math\Vector2.cpp">
@@ -702,6 +711,12 @@
     </ClCompile>
     <ClCompile Include="..\Thirdparty\zlib\iowin32.c">
       <Filter>Thirdparty\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="Online\SteamOnlineSystem.cpp">
+      <Filter>Online</Filter>
+    </ClCompile>
+    <ClCompile Include="Online\SteamCallback.cpp">
+      <Filter>Online</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2076,6 +2091,147 @@
     <ClInclude Include="..\Thirdparty\nlohmann\json\json_fwd.hpp">
       <Filter>Thirdparty\JSON</Filter>
     </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteamapps.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteamappticket.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteamclient.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteamcontroller.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteamdualsense.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteamfriends.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteamgamecoordinator.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteamgameserver.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteamgameserverstats.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteamhtmlsurface.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteamhttp.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteaminput.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteaminventory.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteammatchmaking.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteammusic.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteamnetworking.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteamnetworkingmessages.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteamnetworkingsockets.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteamnetworkingutils.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteamparentalsettings.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteamps3overlayrenderer.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteamremoteplay.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteamremotestorage.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteamscreenshots.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteamtimeline.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteamugc.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteamuser.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteamuserstats.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteamutils.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\isteamvideo.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\matchmakingtypes.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\steam_api.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\steam_api_common.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\steam_api_flat.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\steam_api_internal.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\steam_gameserver.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\steamclientpublic.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\steamencryptedappticket.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\steamhttpenums.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\steamnetworkingfakeip.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\steamnetworkingtypes.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\steamps3params.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\steamtypes.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Thirdparty\steam\steamuniverse.h">
+      <Filter>Thirdparty\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="Services\ISteamService.hpp">
+      <Filter>Services</Filter>
+    </ClInclude>
+    <ClInclude Include="Online\SteamOnlineSystem.hpp">
+      <Filter>Online</Filter>
+    </ClInclude>
+    <ClInclude Include="Online\SteamCallback.hpp">
+      <Filter>Online</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Renderer\DirectX\Shaders\webp.hlsl">
@@ -2113,5 +2269,16 @@
     <None Include="..\Thirdparty\zlib\zconf.h.in">
       <Filter>Thirdparty\zlib</Filter>
     </None>
+    <None Include="..\Thirdparty\steam\steam_api.json">
+      <Filter>Thirdparty\steam</Filter>
+    </None>
+    <None Include="..\Thirdparty\steam\lib\steam_api64.dll">
+      <Filter>Thirdparty\steam\lib</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\Thirdparty\steam\lib\steam_api64.lib">
+      <Filter>Thirdparty\steam\lib</Filter>
+    </Library>
   </ItemGroup>
 </Project>

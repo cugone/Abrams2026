@@ -40,6 +40,15 @@
 
     #define MAX_LOGS 3u
 
+    //Uncomment this define to make the Steam Online System available in your game. Currently it only supports achievements.
+    //Make sure to change STEAM_APP_ID to your Own steam app id when you get one!
+    //#define ONLINE_STEAM
+    #if defined(ONLINE_STEAM)
+        #define STEAM_APP_ID 480u
+    #else
+        #define STEAM_APP_ID 0u
+    #endif
+
     #define TOKEN_PASTE_SIMPLE(x, y) x##y
     #define TOKEN_PASTE(x, y) TOKEN_PASTE_SIMPLE(x, y)
     #define TOKEN_STRINGIZE_SIMPLE(x) #x

@@ -109,6 +109,8 @@
     <ClCompile Include="Math\Vector4.cpp" />
     <ClCompile Include="Networking\Address.cpp" />
     <ClCompile Include="Networking\NetUtils.cpp" />
+    <ClCompile Include="Online\SteamCallback.cpp" />
+    <ClCompile Include="Online\SteamOnlineSystem.cpp" />
     <ClCompile Include="Physics\CableJoint.cpp" />
     <ClCompile Include="Physics\Collider.cpp" />
     <ClCompile Include="Physics\DragForceGenerator.cpp" />
@@ -356,6 +358,50 @@
     <ClInclude Include="..\Thirdparty\stb\stb_image.h" />
     <ClInclude Include="..\Thirdparty\stb\stb_image_write.h" />
     <ClInclude Include="..\Thirdparty\stb\stb_rect_pack.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteamapps.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteamappticket.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteamclient.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteamcontroller.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteamdualsense.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteamfriends.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteamgamecoordinator.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteamgameserver.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteamgameserverstats.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteamhtmlsurface.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteamhttp.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteaminput.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteaminventory.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteammatchmaking.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteammusic.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteamnetworking.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteamnetworkingmessages.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteamnetworkingsockets.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteamnetworkingutils.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteamparentalsettings.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteamps3overlayrenderer.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteamremoteplay.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteamremotestorage.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteamscreenshots.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteamtimeline.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteamugc.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteamuser.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteamuserstats.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteamutils.h" />
+    <ClInclude Include="..\Thirdparty\steam\isteamvideo.h" />
+    <ClInclude Include="..\Thirdparty\steam\matchmakingtypes.h" />
+    <ClInclude Include="..\Thirdparty\steam\steamclientpublic.h" />
+    <ClInclude Include="..\Thirdparty\steam\steamencryptedappticket.h" />
+    <ClInclude Include="..\Thirdparty\steam\steamhttpenums.h" />
+    <ClInclude Include="..\Thirdparty\steam\steamnetworkingfakeip.h" />
+    <ClInclude Include="..\Thirdparty\steam\steamnetworkingtypes.h" />
+    <ClInclude Include="..\Thirdparty\steam\steamps3params.h" />
+    <ClInclude Include="..\Thirdparty\steam\steamtypes.h" />
+    <ClInclude Include="..\Thirdparty\steam\steamuniverse.h" />
+    <ClInclude Include="..\Thirdparty\steam\steam_api.h" />
+    <ClInclude Include="..\Thirdparty\steam\steam_api_common.h" />
+    <ClInclude Include="..\Thirdparty\steam\steam_api_flat.h" />
+    <ClInclude Include="..\Thirdparty\steam\steam_api_internal.h" />
+    <ClInclude Include="..\Thirdparty\steam\steam_gameserver.h" />
     <ClInclude Include="..\Thirdparty\TinyXML2\tinyxml2.h" />
     <ClInclude Include="..\Thirdparty\Tracy\tracy\Tracy.hpp" />
     <ClInclude Include="..\Thirdparty\webm\common\file_util.h" />
@@ -551,6 +597,8 @@
     <ClInclude Include="Memory\MemoryPool.hpp" />
     <ClInclude Include="Networking\Address.hpp" />
     <ClInclude Include="Networking\NetUtils.hpp" />
+    <ClInclude Include="Online\SteamCallback.hpp" />
+    <ClInclude Include="Online\SteamOnlineSystem.hpp" />
     <ClInclude Include="Physics\CableJoint.hpp" />
     <ClInclude Include="Physics\Collider.hpp" />
     <ClInclude Include="Physics\DragForceGenerator.hpp" />
@@ -646,6 +694,7 @@
     <ClInclude Include="Services\IPhysicsService.hpp" />
     <ClInclude Include="Services\IRendererService.hpp" />
     <ClInclude Include="Services\IService.hpp" />
+    <ClInclude Include="Services\ISteamService.hpp" />
     <ClInclude Include="Services\IVideoService.hpp" />
     <ClInclude Include="Services\ServiceLocator.hpp" />
     <ClInclude Include="System\Cpu.hpp" />
@@ -685,6 +734,8 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Thirdparty\steam\lib\steam_api64.dll" />
+    <None Include="..\Thirdparty\steam\steam_api.json" />
     <None Include="..\Thirdparty\zlib\zconf.h.in" />
     <None Include="Renderer\DirectX\Shaders\Font_PS.cso">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -722,6 +773,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='FinalBuild|x64'">true</ExcludedFromBuild>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\Thirdparty\steam\lib\steam_api64.lib" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
